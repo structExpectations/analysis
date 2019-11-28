@@ -1,0 +1,3 @@
+[submodule "submodules/soepy"]
+	path = submodules/soepy
+	url = https://github.com/OpenSourceEconomics/soepy.git
