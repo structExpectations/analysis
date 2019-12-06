@@ -3,6 +3,8 @@ import pickle
 import pandas as pd
 import numpy as np
 
+from analysis.configurations.analysis_soepy_config import RESOURCES_DIR
+
 
 def pre_process_soep_data(file_name):
     data_full = pd.read_stata(file_name)
@@ -245,10 +247,10 @@ def get_observed_data_moments_and_weighting(data_file_name):
         data_frame_observed, num_agents_smm=6000, num_samples=200
     )
 
-    with open("init_files/moments_obs.pkl", "wb") as f:
+    with open(str(RESOURCES_DIR) + "/moments_obs.pkl", "wb") as f:
         pickle.dump(moments_obs, f)
 
-    with open("init_files/weighting_matrix.pkl", "wb") as f:
+    with open(str(RESOURCES_DIR) + "/weighting_matrix.pkl", "wb") as f:
         pickle.dump(weighting_matrix, f)
 
     return moments_obs, weighting_matrix
