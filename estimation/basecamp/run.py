@@ -65,14 +65,12 @@ model_spec_init_file_name = "resources/model_spec_init.yml"
 log_file_name_extension = "test"
 
 
-model_params_df = prepare_estimation(
-    model_params_init_file_name, lower, upper
-)
+model_params_df = prepare_estimation(model_params_init_file_name, lower, upper)
 
-with open('resources/moments_obs.pkl', 'rb') as f:
+with open("resources/moments_obs.pkl", "rb") as f:
     moments_obs = pickle.load(f)
 
-with open('resources/weighting_matrix.pkl', 'rb') as f:
+with open("resources/weighting_matrix.pkl", "rb") as f:
     weighting_matrix = pickle.load(f)
 
 max_evals = 2

@@ -20,60 +20,53 @@ def pre_process_soep_data(file_name):
     def get_period(row):
         return row["age"] - 17
 
-    data["Period"] = data.apply(
-        lambda row: get_period(row), axis=1
-    )
+    data["Period"] = data.apply(lambda row: get_period(row), axis=1)
 
     # Determine the observed wage given period choice
     def recode_educ_level(row):
-        if row["hdegree"] == 'Primary/basic vocational':
+        if row["hdegree"] == "Primary/basic vocational":
             return 0
-        elif row["hdegree"] == 'Abi/intermediate voc.':
+        elif row["hdegree"] == "Abi/intermediate voc.":
             return 1
-        elif row["hdegree"] == 'University':
+        elif row["hdegree"] == "University":
             return 2
         else:
             return np.nan
 
-    data["Educ Level"] = data.apply(
-        lambda row: recode_educ_level(row), axis=1
-    )
+    data["Educ Level"] = data.apply(lambda row: recode_educ_level(row), axis=1)
 
     # Recode choice
     # Determine the observed wage given period choice
     def recode_choice(row):
-        if row["empchoice"] == 'Full-Time':
+        if row["empchoice"] == "Full-Time":
             return 2
-        elif row["empchoice"] == 'Part-Time':
+        elif row["empchoice"] == "Part-Time":
             return 1
-        elif row["empchoice"] == 'Non-Working':
+        elif row["empchoice"] == "Non-Working":
             return 0
         else:
             return np.nan
 
-    data["Choice"] = data.apply(
-        lambda row: recode_choice(row), axis=1
-    )
+    data["Choice"] = data.apply(lambda row: recode_choice(row), axis=1)
 
     # Generate wage for Non-Employment choice
     data["wage_nw_imp"] = 4.00
 
     # Determine the observed wage given period choice
     def get_observed_wage(row):
-        if row["empchoice"] == 'Full-Time':
+        if row["empchoice"] == "Full-Time":
             return row["wage_ft"]
-        elif row["empchoice"] == 'Part-Time':
+        elif row["empchoice"] == "Part-Time":
             return row["wage_pt"]
-        elif row["empchoice"] == 'Non-Working':
+        elif row["empchoice"] == "Non-Working":
             return row["wage_nw_imp"]
         else:
             return np.nan
 
-    data["Wage Observed"] = data.apply(
-        lambda row: get_observed_wage(row), axis=1
-    )
+    data["Wage Observed"] = data.apply(lambda row: get_observed_wage(row), axis=1)
 
     return data
+
 
 def get_moments_obs(data):
     # Initialize moments dictionary
@@ -98,9 +91,7 @@ def get_moments_obs(data):
                 moments["Wage_Distribution"][period].append(info[label][period])
         except KeyError:
             for i in range(2):
-                moments["Wage_Distribution"][period].append(
-                    0.0
-                )
+                moments["Wage_Distribution"][period].append(0.0)
 
     # Compute unconditional moments of the choice probabilities
     info = data.groupby(["Period"])["Choice"].value_counts(normalize=True).to_dict()
@@ -115,6 +106,7 @@ def get_moments_obs(data):
             moments["Choice_Probability"][period].append(stat)
 
     return moments
+
 
 def get_weighting_matrix(data_frame, num_agents_smm, num_samples):
     """Calculates the weighting matrix based on the
@@ -166,13 +158,20 @@ def moments_dict_to_list(moments_dict):
             moments_list.extend(moments_dict[group][period])
     return moments_list
 
+
 def get_moments(data):
     # Pre_process data frame
 
     # Determine the education level given years of experience
     data["Educ_Level"] = 0
-    data.loc[(data["Years_of_Education"] >= 10) & (data["Years_of_Education"] < 12), "Educ_Level"] = 0
-    data.loc[(data["Years_of_Education"] >= 12) & (data["Years_of_Education"] < 16), "Educ_Level"] = 1
+    data.loc[
+        (data["Years_of_Education"] >= 10) & (data["Years_of_Education"] < 12),
+        "Educ_Level",
+    ] = 0
+    data.loc[
+        (data["Years_of_Education"] >= 12) & (data["Years_of_Education"] < 16),
+        "Educ_Level",
+    ] = 1
     data.loc[data["Years_of_Education"] >= 16, "Educ_Level"] = 2
 
     # Determine the observed wage given period choice
@@ -224,9 +223,8 @@ def get_moments(data):
 
     return moments
 
-def prepare_estimation(
-    model_params_init_file_name, lower, upper
-):
+
+def prepare_estimation(model_params_init_file_name, lower, upper):
     """Prepares objects for SMM estimation."""
 
     # Read in data and init file sources
@@ -235,6 +233,7 @@ def prepare_estimation(
     model_params_df["upper"] = upper
 
     return model_params_df
+
 
 def get_observed_data_moments_and_weighting(data_file_name):
     """This function extracts the observed moments and the associated weighting matrix
@@ -246,10 +245,10 @@ def get_observed_data_moments_and_weighting(data_file_name):
         data_frame_observed, num_agents_smm=6000, num_samples=200
     )
 
-    with open('init_files/moments_obs.pkl', 'wb') as f:
+    with open("init_files/moments_obs.pkl", "wb") as f:
         pickle.dump(moments_obs, f)
 
-    with open('init_files/weighting_matrix.pkl', 'wb') as f:
+    with open("init_files/weighting_matrix.pkl", "wb") as f:
         pickle.dump(weighting_matrix, f)
 
     return moments_obs, weighting_matrix

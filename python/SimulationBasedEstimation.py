@@ -110,7 +110,9 @@ class SimulationBasedEstimationCls:
         if not os.path.exists("logging/"):
             os.makedirs("logging/")
 
-        fname = "logging/monitoring.smm_estimagic." + self.log_file_name_extension + ".info"
+        fname = (
+            "logging/monitoring.smm_estimagic." + self.log_file_name_extension + ".info"
+        )
         fname2 = (
             "logging/monitoring_compact.smm_estimagic."
             + self.log_file_name_extension
