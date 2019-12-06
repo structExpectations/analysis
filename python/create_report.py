@@ -10,7 +10,7 @@ import os
 
 from PyPDF2 import PdfFileMerger
 
-from smm_estimagic.create_fig_model_fit import create_fig_model_fit
+from analysis.python.create_fig_model_fit import create_fig_model_fit
 
 if __name__ == "__main__":
 

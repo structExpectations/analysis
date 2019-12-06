@@ -5,23 +5,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import soepy
-from smm_soepy_config import LOG_FILES_DIR, INIT_FILES_DIR
-from smm_estimagic.auxiliary import get_moments
+from analysis.configurations.analysis_soepy_config import (
+    LOGGING_DIR,
+    RESOURCES_DIR,
+    FIGURES_DIR,
+)
+from analysis.python.auxiliary import get_moments
 
 
 def create_fig_model_fit():
     """Plots simulated against observed moments"""
 
     # Get simulated moments
-    model_params = pd.read_pickle(LOG_FILES_DIR / "step.soepy.pkl")
+    model_params = pd.read_pickle(LOGGING_DIR / "step.soepy.pkl")
     model_params = model_params.drop(model_params.columns[1:], axis=1)
     data_sim = soepy.simulate(
-        model_params, str(INIT_FILES_DIR) + "/model_spec_init.yml", is_expected=False
+        model_params, str(RESOURCES_DIR) + "/model_spec_init.yml", is_expected=False
     )
     moments_sim = get_moments(data_sim)
 
     # Get observed moments
-    with open(str(INIT_FILES_DIR) + "/moments_obs.pkl", "rb") as f:
+    with open(str(RESOURCES_DIR) + "/moments_obs.pkl", "rb") as f:
         moments_obs = pickle.load(f)
 
     # Plot choice probabilities
@@ -55,7 +59,9 @@ def create_fig_model_fit():
         ax.legend(["Simulated", "Observed"])
 
         plt.savefig(
-            "figures/choice_prob_" + str(choice) + ".pdf", ax=ax, bbox_inches="tight"
+            str(FIGURES_DIR) + "/choice_prob_" + str(choice) + ".pdf",
+            ax=ax,
+            bbox_inches="tight",
         )
         plt.close()
 
@@ -82,5 +88,5 @@ def create_fig_model_fit():
 
     ax.legend(["Simulated", "Observed"])
 
-    plt.savefig("figures/wages.pdf", ax=ax, bbox_inches="tight")
+    plt.savefig(str(FIGURES_DIR) + "/wages.pdf", ax=ax, bbox_inches="tight")
     plt.close()
