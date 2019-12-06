@@ -3,9 +3,9 @@ import pickle
 import numpy as np
 
 from estimagic.optimization.optimize import minimize
-from smm_estimagic.auxiliary import prepare_estimation
-from smm_estimagic.auxiliary import get_moments
-from smm_estimagic.SimulationBasedEstimation import SimulationBasedEstimationCls
+from analysis.python.auxiliary import prepare_estimation
+from analysis.python.auxiliary import get_moments
+from analysis.python.SimulationBasedEstimation import SimulationBasedEstimationCls
 
 
 lower = np.tile(
@@ -60,22 +60,22 @@ upper = np.tile(
     1,
 )
 
-model_params_init_file_name = "init_files/toy_model_init_file_03_2types.pkl"
-model_spec_init_file_name = "init_files/model_spec_init.yml"
-log_file_name_extension = "data_v2"
+model_params_init_file_name = "resources/toy_model_init_file_03_2types.pkl"
+model_spec_init_file_name = "resources/model_spec_init.yml"
+log_file_name_extension = "test"
 
 
 model_params_df = prepare_estimation(
     model_params_init_file_name, lower, upper
 )
 
-with open('init_files/moments_obs.pkl', 'rb') as f:
+with open('resources/moments_obs.pkl', 'rb') as f:
     moments_obs = pickle.load(f)
 
-with open('init_files/weighting_matrix.pkl', 'rb') as f:
+with open('resources/weighting_matrix.pkl', 'rb') as f:
     weighting_matrix = pickle.load(f)
 
-max_evals = 2000
+max_evals = 2
 
 adapter_smm = SimulationBasedEstimationCls(
     params=model_params_df,
