@@ -11,6 +11,7 @@ import os
 from PyPDF2 import PdfFileMerger
 
 from analysis.python.create_fig_model_fit import create_fig_model_fit
+from analysis.configurations.analysis_soepy_config import FIGURES_DIR
 
 if __name__ == "__main__":
 
@@ -56,7 +57,7 @@ if __name__ == "__main__":
     # We merge all output for easier accessibility in a single document and store it in the
     # estimation directory.
     merger = PdfFileMerger()
-    for fname in sorted(glob.glob(f"figures/*.pdf")):
+    for fname in sorted(glob.glob(str(FIGURES_DIR) + "/*.pdf")):
         merger.append(fname)
-    merger.write(f"figures/estimation_report.pdf")
+    merger.write(str(FIGURES_DIR) + "/estimation_report.pdf")
     merger.close()
