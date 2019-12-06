@@ -5,6 +5,8 @@ import numpy as np
 
 import soepy
 
+from analysis.configurations.analysis_soepy_config import LOGGING_DIR
+
 HUGE_INT = 100000000000
 
 
@@ -56,7 +58,7 @@ class SimulationBasedEstimationCls:
             self.fval = pd.DataFrame(
                 data, columns=["current", "start", "step"], index=[0]
             )
-            self.params.to_pickle("logging/step.soepy.pkl")
+            self.params.to_pickle(str(LOGGING_DIR) + "/step.soepy.pkl")
         else:
             is_step = self.fval["step"].iloc[-1] > fval
             step = self.fval["step"].iloc[-1]
@@ -64,7 +66,7 @@ class SimulationBasedEstimationCls:
 
             if is_step:
                 data = {"current": fval, "start": start, "step": fval}
-                self.params.to_pickle("logging/step.soepy.pkl")
+                self.params.to_pickle(str(LOGGING_DIR) + "/step.soepy.pkl")
             else:
                 data = {"current": fval, "start": start, "step": step}
 
@@ -111,10 +113,14 @@ class SimulationBasedEstimationCls:
             os.makedirs("logging/")
 
         fname = (
-            "logging/monitoring.smm_estimagic." + self.log_file_name_extension + ".info"
+            str(LOGGING_DIR)
+            + "/monitoring.smm_estimagic."
+            + self.log_file_name_extension
+            + ".info"
         )
         fname2 = (
-            "logging/monitoring_compact.smm_estimagic."
+            str(LOGGING_DIR)
+            + "/monitoring_compact.smm_estimagic."
             + self.log_file_name_extension
             + ".info"
         )
