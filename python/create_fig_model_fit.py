@@ -50,8 +50,8 @@ def create_fig_model_fit():
 
         # Start plot
         ax = plt.figure(figsize=[16, 9]).add_subplot(111)
-        ax.set_ylabel(lables[choice], fontsize=16)
-        ax.set_xlabel("Period", fontsize=16)
+        ax.set_ylabel(lables[choice])
+        ax.set_xlabel("Period")
 
         plt.plot(x, sim_choice_prob, color="mediumturquoise")
         plt.plot(x, obs_choice_prob)
@@ -80,8 +80,8 @@ def create_fig_model_fit():
 
     # Start plot
     ax = plt.figure(figsize=[16, 9]).add_subplot(111)
-    ax.set_ylabel(lables[choice], fontsize=16)
-    ax.set_xlabel("Period", fontsize=16)
+    ax.set_ylabel(lables[choice])
+    ax.set_xlabel("Period")
 
     plt.plot(x, sim_wages, color="mediumturquoise")
     plt.plot(x, obs_wages)
