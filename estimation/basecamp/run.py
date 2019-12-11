@@ -5,7 +5,7 @@ import numpy as np
 
 from estimagic.optimization.optimize import minimize
 from python.auxiliary import prepare_estimation
-from python.auxiliary import get_moments
+from estimation.basecamp.moments_calculation import get_moments
 from python.SimulationBasedEstimation import SimulationBasedEstimationCls
 
 
