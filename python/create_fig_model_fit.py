@@ -5,12 +5,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import soepy
-from analysis.configurations.analysis_soepy_config import (
+from configurations.analysis_soepy_config import (
     LOGGING_DIR,
     RESOURCES_DIR,
     FIGURES_DIR,
 )
-from analysis.python.auxiliary import get_moments
+from python.auxiliary import get_moments
 
 
 def create_fig_model_fit():

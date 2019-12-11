@@ -10,8 +10,8 @@ import os
 
 from PyPDF2 import PdfFileMerger
 
-from analysis.python.create_fig_model_fit import create_fig_model_fit
-from analysis.configurations.analysis_soepy_config import FIGURES_DIR
+from python.create_fig_model_fit import create_fig_model_fit
+from configurations.analysis_soepy_config import FIGURES_DIR
 
 if __name__ == "__main__":
 
@@ -48,8 +48,8 @@ if __name__ == "__main__":
     if args.is_clear:
         shutil.rmtree("figures", ignore_errors=True)
 
-    if not os.path.exists("figures"):
-        os.mkdir("figures")
+    if not os.path.exists(str(FIGURES_DIR)):
+        os.mkdir(str(FIGURES_DIR))
 
     if args.is_model_fit or args.is_all:
         create_fig_model_fit()

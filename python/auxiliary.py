@@ -3,7 +3,7 @@ import pickle
 import pandas as pd
 import numpy as np
 
-from analysis.configurations.analysis_soepy_config import RESOURCES_DIR
+from configurations.analysis_soepy_config import RESOURCES_DIR
 
 
 def pre_process_soep_data(file_name):
@@ -12,7 +12,7 @@ def pre_process_soep_data(file_name):
     # Restrict sample to age 50
     data_30periods = data_full[data_full["age"] < 47]
 
-    # Restirct sample to west Germany
+    # Restrict sample to west Germany
     data = data_30periods[data_30periods["east"] == 0]
 
     # Drop observations with missing values in hdegree

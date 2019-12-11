@@ -1,11 +1,12 @@
+#!usr/bin/env python
 import pickle
 
 import numpy as np
 
 from estimagic.optimization.optimize import minimize
-from analysis.python.auxiliary import prepare_estimation
-from analysis.python.auxiliary import get_moments
-from analysis.python.SimulationBasedEstimation import SimulationBasedEstimationCls
+from python.auxiliary import prepare_estimation
+from python.auxiliary import get_moments
+from python.SimulationBasedEstimation import SimulationBasedEstimationCls
 
 
 lower = np.tile(

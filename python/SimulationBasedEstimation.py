@@ -5,7 +5,7 @@ import numpy as np
 
 import soepy
 
-from analysis.configurations.analysis_soepy_config import LOGGING_DIR
+from configurations.analysis_soepy_config import LOGGING_DIR
 
 HUGE_INT = 100000000000
 
@@ -108,9 +108,9 @@ class SimulationBasedEstimationCls:
     def _logging_smm(self, stats_obs, stats_sim, fval):
         """This method contains logging capabilities that are just relevant for the SMM routine."""
 
-        # Save log files in a seperate directory
-        if not os.path.exists("logging/"):
-            os.makedirs("logging/")
+        # Save log files in a separate directory
+        if not os.path.exists(str(LOGGING_DIR)):
+            os.makedirs(str(LOGGING_DIR))
 
         fname = (
             str(LOGGING_DIR)
