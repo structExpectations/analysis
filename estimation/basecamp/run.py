@@ -74,8 +74,6 @@ with open("resources/moments_obs.pkl", "rb") as f:
 with open("resources/weighting_matrix.pkl", "rb") as f:
     weighting_matrix = pickle.load(f)
 
-max_evals = 2
-
 adapter_smm = SimulationBasedEstimationCls(
     params=model_params_df,
     model_spec_init_file_name=model_spec_init_file_name,
@@ -83,10 +81,9 @@ adapter_smm = SimulationBasedEstimationCls(
     weighting_matrix=weighting_matrix,
     get_moments=get_moments,
     log_file_name_extension=log_file_name_extension,
-    max_evals=max_evals,
 )
 
-algo_options = {"stopeval": 1e-14}
+algo_options = {"stopeval": 1e-14, "maxeval": 2}
 
 
 result = minimize(
