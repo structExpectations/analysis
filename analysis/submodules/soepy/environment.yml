@@ -1,0 +1,22 @@
+name: soepy
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+- numpy
+- numba
+- pandas
+- flake8
+- pytest
+- pytest-cov
+- pandoc
+- pyyaml
+- nbsphinx
+- sphinx_rtd_theme
+- codecov
+- ipython
+- pip
+- pip:
+  - pre-commit
+  - black
+
