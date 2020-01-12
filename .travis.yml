@@ -27,6 +27,10 @@ script:
     # pytest submodules
     - py.test
 
-    #
+    # Test estimation run
+    - cd python; python create_report.py; cd ../..
+
+    # Test report building
+    - cd estimation/basecamp; python run.py; cd ../..
 
 
