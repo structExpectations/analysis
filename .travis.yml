@@ -21,8 +21,8 @@ before_script:
 
 script:
     # Test code quality
-    - pre-commit install -f --install-hooks
-    - pre-commit run -a
+    - flake 8
+    - black .
 
     # pytest submodules
     - py.test

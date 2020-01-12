@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Create estimation report
-This script allows to create a summary estimation report. It is assumed that it is called in the
+This script allows to create a summary estimation report.
+It is assumed that it is called in the
 directory where the estimation is running.
 """
 import argparse
@@ -54,8 +55,8 @@ if __name__ == "__main__":
     if args.is_model_fit or args.is_all:
         create_fig_model_fit()
 
-    # We merge all output for easier accessibility in a single document and store it in the
-    # estimation directory.
+    # We merge all output for easier accessibility in a single document
+    # and store it in the estimation directory.
     merger = PdfFileMerger()
     for fname in sorted(glob.glob(str(FIGURES_DIR) + "/*.pdf")):
         merger.append(fname)

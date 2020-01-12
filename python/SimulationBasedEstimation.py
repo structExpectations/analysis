@@ -106,7 +106,8 @@ class SimulationBasedEstimationCls:
         return fval, stats_obs, stats_sim
 
     def _logging_smm(self, stats_obs, stats_sim, fval):
-        """This method contains logging capabilities that are just relevant for the SMM routine."""
+        """This method contains logging capabilities
+        that are just relevant for the SMM routine."""
 
         # Save log files in a separate directory
         if not os.path.exists(str(LOGGING_DIR)):
