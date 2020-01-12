@@ -18,10 +18,11 @@ install:
 
 before_script:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
+  - export PYTHONPATH=$PYTHONPATH:$PROJECT_DIR/submodules/soepy
 
 script:
     # Test code quality
-    - flake 8
+    - flake8
     - black .
 
     # pytest submodules
