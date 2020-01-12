@@ -3,7 +3,8 @@ data."""
 
 import pickle as pkl
 
-def get_moments(data, is_store = False):
+
+def get_moments(data, is_store=False):
     # Pre_process data frame
 
     # Determine the education level given years of experience
