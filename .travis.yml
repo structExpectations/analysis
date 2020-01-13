@@ -16,9 +16,14 @@ install:
   - conda env create -f configurations/environment.yml
   - source activate structExpectations-analysis
 
+git:
+    submodules: false
+before_install:
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+    - git submodule update --init --recursive
+
 before_script:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
-  - export PYTHONPATH=$PYTHONPATH:$PROJECT_DIR/submodules/soepy
 
 script:
     # Test code quality
