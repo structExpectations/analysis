@@ -5,6 +5,7 @@ import pickle as pkl
 
 num_periods = 30
 
+
 def get_moments(data, is_store=False):
     # Pre_process data frame
 

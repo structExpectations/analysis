@@ -7,6 +7,7 @@ from configurations.analysis_soepy_config import RESOURCES_DIR
 
 num_periods = 30
 
+
 def pre_process_soep_data(file_name):
     data_full = pd.read_stata(file_name)
 
@@ -17,7 +18,7 @@ def pre_process_soep_data(file_name):
     data = data_30periods[data_30periods["east"] == 0]
 
     # Drop observations with missing values in hdegree
-    data = data[data["hdegree"].isna() == False]
+    data = data[data["hdegree"].notna()]
 
     # Generate period variable
     def get_period(row):
@@ -124,8 +125,6 @@ def get_weighting_matrix(data_frame, num_agents_smm, num_samples):
         moments_sample_k = get_moments_obs(data_frame_sample)
 
         moments_sample.append(moments_sample_k)
-
-        k = +1
 
     # Append samples to a list of size num_samples
     # containing number of moments values each
