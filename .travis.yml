@@ -17,8 +17,7 @@ install:
   - source activate structExpectations-analysis
 
 before_script:
-  - export PYTHONPATH=$PYTHONPATH:$(pwd)
-  - export PYTHONPATH=$PYTHONPATH:$(pwd)/submodules/soepy
+  - source .envrc
 
 script:
     # Test code quality
@@ -28,10 +27,10 @@ script:
     # pytest submodules
     - py.test
 
-    # Test estimation run
-    - cd python; python create_report.py --all; cd ..
+    # Test report
+    - cd estimation/basecamp; create-report --all;
 
-    # Test report building
-    - cd estimation/basecamp; python run.py; cd ../..
+    # Test estimation run
+    - python run.py; cd ../..
 
 
