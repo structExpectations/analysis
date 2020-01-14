@@ -5,6 +5,8 @@ import numpy as np
 
 from configurations.analysis_soepy_config import RESOURCES_DIR
 
+NUM_PERIODS = 30
+
 
 def pre_process_soep_data(file_name):
     data_full = pd.read_stata(file_name)
@@ -16,7 +18,7 @@ def pre_process_soep_data(file_name):
     data = data_30periods[data_30periods["east"] == 0]
 
     # Drop observations with missing values in hdegree
-    data = data[data["hdegree"].isna() == False]
+    data = data[data["hdegree"].notna()]
 
     # Generate period variable
     def get_period(row):
@@ -86,7 +88,7 @@ def get_moments_obs(data):
 
     # Save mean and standard deviation of wages for each period
     # to Wage Distribution section of the moments dictionary
-    for period in range(30):
+    for period in range(NUM_PERIODS):
         moments["Wage_Distribution"][period] = []
         try:
             for label in ["mean", "std"]:
@@ -98,7 +100,7 @@ def get_moments_obs(data):
     # Compute unconditional moments of the choice probabilities
     info = data.groupby(["Period"])["Choice"].value_counts(normalize=True).to_dict()
 
-    for period in range(30):
+    for period in range(NUM_PERIODS):
         moments["Choice_Probability"][period] = []
         for choice in range(3):
             try:
@@ -124,8 +126,6 @@ def get_weighting_matrix(data_frame, num_agents_smm, num_samples):
 
         moments_sample.append(moments_sample_k)
 
-        k = +1
-
     # Append samples to a list of size num_samples
     # containing number of moments values each
     stats = []
@@ -150,7 +150,8 @@ def get_weighting_matrix(data_frame, num_agents_smm, num_samples):
 
 
 def moments_dict_to_list(moments_dict):
-    """This function constructs a list of available moments based on the moment dictionary."""
+    """This function constructs a list of available moments
+    based on the moment dictionary."""
     moments_list = []
     for group in [
         "Wage_Distribution",
@@ -202,7 +203,7 @@ def get_moments(data):
 
     # Save mean and standard deviation of wages for each period
     # to Wage Distribution section of the moments dictionary
-    for period in range(30):  ## TO DO: Remove hard coded number
+    for period in range(NUM_PERIODS):  # TODO: Remove hard coded number
         moments["Wage_Distribution"][period] = []
         try:
             for label in ["mean", "std"]:
@@ -214,7 +215,7 @@ def get_moments(data):
     # Compute unconditional moments of the choice probabilities
     info = data.groupby(["Period"])["Choice"].value_counts(normalize=True).to_dict()
 
-    for period in range(30):  ## TO DO: Remove hard coded number
+    for period in range(NUM_PERIODS):  # TODO: Remove hard coded number
         moments["Choice_Probability"][period] = []
         for choice in range(3):
             try:

@@ -3,7 +3,10 @@ data."""
 
 import pickle as pkl
 
-def get_moments(data, is_store = False):
+NUM_PERIODS = 30
+
+
+def get_moments(data, is_store=False):
     # Pre_process data frame
 
     # Determine the education level given years of experience
@@ -44,7 +47,7 @@ def get_moments(data, is_store = False):
 
     # Save mean and standard deviation of wages for each period
     # to Wage Distribution section of the moments dictionary
-    for period in range(30):  ## TO DO: Remove hard coded number
+    for period in range(NUM_PERIODS):  # TODO: Remove hard coded number
         moments["Wage_Distribution"][period] = []
         try:
             for label in ["mean", "std"]:
@@ -56,7 +59,7 @@ def get_moments(data, is_store = False):
     # Compute unconditional moments of the choice probabilities
     info = data.groupby(["Period"])["Choice"].value_counts(normalize=True).to_dict()
 
-    for period in range(30):  ## TO DO: Remove hard coded number
+    for period in range(NUM_PERIODS):  # TODO: Remove hard coded number
         moments["Choice_Probability"][period] = []
         for choice in range(3):
             try:
