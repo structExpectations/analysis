@@ -2,6 +2,7 @@
 import pickle
 
 import pandas as pd
+import numpy as np
 
 from estimagic.optimization.optimize import minimize
 from estimation.basecamp.moments_calculation import get_moments
@@ -29,7 +30,7 @@ adapter_smm = SimulationBasedEstimationCls(
     log_file_name_extension=log_file_name_extension,
 )
 
-algo_options = {"stopeval": 1e-14, "maxeval": 2}
+algo_options = {"stopeval": 1e-14, "maxeval": 1}
 
 
 result = minimize(
@@ -37,4 +38,8 @@ result = minimize(
     params=adapter_smm.params,
     algorithm="nlopt_bobyqa",
     algo_options=algo_options,
+)
+
+np.testing.assert_almost_equal(
+    11356.971245152485, result[0]["fitness"], 6, "Criterion value mismatch"
 )
