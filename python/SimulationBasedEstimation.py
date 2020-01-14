@@ -5,6 +5,8 @@ import numpy as np
 
 import soepy
 
+from configurations.analysis_soepy_config import LOGGING_DIR
+
 HUGE_INT = 100000000000
 
 
@@ -56,7 +58,7 @@ class SimulationBasedEstimationCls:
             self.fval = pd.DataFrame(
                 data, columns=["current", "start", "step"], index=[0]
             )
-            self.params.to_pickle("logging/step.soepy.pkl")
+            self.params.to_pickle(str(LOGGING_DIR) + "/step.soepy.pkl")
         else:
             is_step = self.fval["step"].iloc[-1] > fval
             step = self.fval["step"].iloc[-1]
@@ -64,7 +66,7 @@ class SimulationBasedEstimationCls:
 
             if is_step:
                 data = {"current": fval, "start": start, "step": fval}
-                self.params.to_pickle("logging/step.soepy.pkl")
+                self.params.to_pickle(str(LOGGING_DIR) + "/step.soepy.pkl")
             else:
                 data = {"current": fval, "start": start, "step": step}
 
@@ -104,15 +106,22 @@ class SimulationBasedEstimationCls:
         return fval, stats_obs, stats_sim
 
     def _logging_smm(self, stats_obs, stats_sim, fval):
-        """This method contains logging capabilities that are just relevant for the SMM routine."""
+        """This method contains logging capabilities
+        that are just relevant for the SMM routine."""
 
-        # Save log files in a seperate directory
-        if not os.path.exists("logging/"):
-            os.makedirs("logging/")
+        # Save log files in a separate directory
+        if not os.path.exists(str(LOGGING_DIR)):
+            os.makedirs(str(LOGGING_DIR))
 
-        fname = "logging/monitoring.smm_estimagic." + self.log_file_name_extension + ".info"
+        fname = (
+            str(LOGGING_DIR)
+            + "/monitoring.smm_estimagic."
+            + self.log_file_name_extension
+            + ".info"
+        )
         fname2 = (
-            "logging/monitoring_compact.smm_estimagic."
+            str(LOGGING_DIR)
+            + "/monitoring_compact.smm_estimagic."
             + self.log_file_name_extension
             + ".info"
         )

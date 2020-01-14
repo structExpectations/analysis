@@ -6,11 +6,15 @@ CONSTANTS:
     mu: -0.56
     benefits: 4.0
 INITIAL_CONDITIONS:
-    educ_max: 12
+    educ_max: 16
     educ_min: 10
+EDUC_LEVEL_BOUNDS:
+    low_bound: 11
+    middle_bound: 15
+    high_bound: 20
 SIMULATION:
     seed_sim: 102
-    num_agents_sim: 30000
+    num_agents_sim: 9000
 SOLUTION:
     seed_emax: 635
     num_draws_emax: 500
