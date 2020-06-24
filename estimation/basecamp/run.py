@@ -8,8 +8,8 @@ from estimagic.optimization.optimize import minimize
 from estimation.basecamp.moments_calculation import get_moments
 from python.SimulationBasedEstimation import SimulationBasedEstimationCls
 
-model_params_init_file_name = "resources/toy_model_init_file_03_2types.pkl"
-model_spec_init_file_name = "resources/model_spec_init.yml"
+model_params_init_file_name = "resources/toy_model_init_file_06_3types.pkl"
+model_spec_init_file_name = "resources/model_spec_init_05.yml"
 log_file_name_extension = "test"
 
 
