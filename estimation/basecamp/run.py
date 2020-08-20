@@ -8,9 +8,9 @@ from estimagic.optimization.optimize import minimize
 from estimation.basecamp.moments_calculation import get_moments
 from python.SimulationBasedEstimation import SimulationBasedEstimationCls
 
-model_params_init_file_name = "resources/toy_model_init_file_06_3types.pkl"
-model_spec_init_file_name = "resources/model_spec_init_05.yml"
-log_file_name_extension = "test"
+model_params_init_file_name = "resources/init_values_06_07_3types.pkl"
+model_spec_init_file_name = "resources/model_spec_init_08.yml"
+log_file_name_extension = "run_6"
 
 
 model_params_df = pd.read_pickle(model_params_init_file_name)
@@ -30,7 +30,7 @@ adapter_smm = SimulationBasedEstimationCls(
     log_file_name_extension=log_file_name_extension,
 )
 
-algo_options = {"stopeval": 1e-14, "maxeval": 1}
+algo_options = {"stopeval": 1e-14, "maxeval": 2}
 
 
 result = minimize(
@@ -41,5 +41,5 @@ result = minimize(
 )
 
 np.testing.assert_almost_equal(
-    11356.971245152485, result[0]["fitness"], 6, "Criterion value mismatch"
+    16042.085765533773, result[0]["fitness"], 6, "Criterion value mismatch"
 )

@@ -20,7 +20,7 @@ def create_fig_model_fit():
     model_params = pd.read_pickle(LOGGING_DIR / "step.soepy.pkl")
     model_params = model_params.drop(model_params.columns[1:], axis=1)
     data_sim = soepy.simulate(
-        model_params, str(RESOURCES_DIR) + "/model_spec_init.yml", is_expected=False
+        model_params, str(RESOURCES_DIR) + "/model_spec_init_08.yml", is_expected=False
     )
     moments_sim = get_moments(data_sim)
 

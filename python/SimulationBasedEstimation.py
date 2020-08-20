@@ -44,11 +44,10 @@ class SimulationBasedEstimationCls:
         self.params = params_cand
         self.params.drop(columns=["_fixed"], inplace=True, errors="ignore")
 
+        # print(params_cand)
+
         # Obtain criterion function value
         fval, stats_obs, stats_sim = self._calculate_criterion_func_value(params_cand)
-
-        # print(params_cand)
-        print(fval)
 
         # Save params and function value as pickle object.
         is_start = self.fval is None
@@ -83,6 +82,8 @@ class SimulationBasedEstimationCls:
     def _calculate_criterion_func_value(self, params_cand):
 
         self.params = params_cand
+
+        #print(self.params)
 
         # Generate simulated data set
         data_frame_sim = soepy.simulate(self.params, self.model_spec_init_file_name)

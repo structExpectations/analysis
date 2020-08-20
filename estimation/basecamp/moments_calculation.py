@@ -23,9 +23,6 @@ def get_moments(data, is_store=False):
 
     # Determine the observed wage given period choice
     data["Wage_Observed"] = 0
-    data.loc[data["Choice"] == 0, "Wage_Observed"] = data.loc[
-        data["Choice"] == 0, "Period_Wage_N"
-    ]
     data.loc[data["Choice"] == 1, "Wage_Observed"] = data.loc[
         data["Choice"] == 1, "Period_Wage_P"
     ]
@@ -39,11 +36,19 @@ def get_moments(data, is_store=False):
     moments = dict()
 
     # Store moments in groups as nested dictionary
-    for group in ["Wage_Distribution", "Choice_Probability"]:
+    for group in [
+        "Wage_Distribution",
+        "Choice_Probability",
+    ]:
         moments[group] = dict()
 
     # Compute unconditional moments of the wage distribution
-    info = data.groupby(["Period"])["Wage_Observed"].describe().to_dict()
+    info = (
+        data[data["Choice"] != 0]
+        .groupby(["Period"])["Wage_Observed"]
+        .describe()
+        .to_dict()
+    )
 
     # Save mean and standard deviation of wages for each period
     # to Wage Distribution section of the moments dictionary
