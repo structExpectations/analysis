@@ -18,7 +18,7 @@ def pre_process_soep_data(file_name):
     data = data_30periods[data_30periods["east"] == 0]
 
     # Drop observations with missing values in hdegree
-    data = data[data["hdegree"].notna() == True]
+    data = data[data["hdegree"].notna()]
 
     # Generate period variable
     def get_period(row):
