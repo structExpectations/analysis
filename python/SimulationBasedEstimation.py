@@ -83,8 +83,6 @@ class SimulationBasedEstimationCls:
 
         self.params = params_cand
 
-        #print(self.params)
-
         # Generate simulated data set
         data_frame_sim = soepy.simulate(self.params, self.model_spec_init_file_name)
 

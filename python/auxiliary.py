@@ -14,11 +14,11 @@ def pre_process_soep_data(file_name):
     # Restrict sample to age 50
     data_30periods = data_full[data_full["age"] < 47]
 
-    # Restirct sample to west Germany
+    # Restrict sample to west Germany
     data = data_30periods[data_30periods["east"] == 0]
 
     # Drop observations with missing values in hdegree
-    data = data[data["hdegree"].isna() == False]
+    data = data[data["hdegree"].notna() == True]
 
     # Generate period variable
     def get_period(row):
@@ -120,8 +120,6 @@ def get_weighting_matrix(data_frame, num_agents_smm, num_samples):
         moments_sample_k = get_moments_obs(data_frame_sample)
 
         moments_sample.append(moments_sample_k)
-
-        k = +1
 
     # Append samples to a list of size num_samples
     # containing number of moments values each
@@ -225,7 +223,12 @@ def get_moments(data, is_store=False):
         moments[group] = dict()
 
     # Compute unconditional moments of the wage distribution
-    info = data[data["Choice"] != 0].groupby(["Period"])["Wage_Observed"].describe().to_dict()
+    info = (
+        data[data["Choice"] != 0]
+        .groupby(["Period"])["Wage_Observed"]
+        .describe()
+        .to_dict()
+    )
 
     # Save mean and standard deviation of wages for each period
     # to Wage Distribution section of the moments dictionary
