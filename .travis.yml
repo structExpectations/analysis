@@ -28,7 +28,7 @@ script:
     - py.test
 
     # Test report
-    - cd estimation/basecamp; create-report --all;
+    - cd estimation/basecamp; python create_report.py --all;
 
     # Test estimation run
     - python run.py; cd ../..
