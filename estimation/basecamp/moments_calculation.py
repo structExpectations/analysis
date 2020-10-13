@@ -1,8 +1,6 @@
 """This module contains functions to calculate the moments based on the simulated
 data."""
 
-import pickle as pkl
-
 NUM_PERIODS = 30
 
 
