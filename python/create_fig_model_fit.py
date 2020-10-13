@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 
 import soepy
 from configurations.analysis_soepy_config import (
-    LOGGING_DIR,
     RESOURCES_DIR,
     FIGURES_DIR,
 )
