@@ -92,7 +92,10 @@ class SimulationBasedEstimationCls:
         # Move all moments from a dictionary to an array
         stats_obs, stats_sim = [], []
 
-        for group in ["Wage_Distribution", "Choice_Probability"]:
+        for group in [
+            "Wage_Distribution",
+            "Choice_Probability",
+        ]:
             for key_ in self.moments_obs[group].keys():
                 stats_obs.extend(self.moments_obs[group][key_])
                 stats_sim.extend(moments_sim[group][key_])
@@ -101,6 +104,8 @@ class SimulationBasedEstimationCls:
         stats_dif = np.array(stats_obs) - np.array(stats_sim)
 
         fval = float(np.dot(np.dot(stats_dif, self.weighting_matrix), stats_dif))
+
+        print(fval)
 
         return fval, stats_obs, stats_sim
 

@@ -189,18 +189,6 @@ def get_observed_data_moments_and_weighting(data_file_name):
 def get_moments(data, is_store=False):
     # Pre_process data frame
 
-    # Determine the education level given years of experience
-    data["Educ_Level"] = 0
-    data.loc[
-        (data["Years_of_Education"] >= 10) & (data["Years_of_Education"] < 12),
-        "Educ_Level",
-    ] = 0
-    data.loc[
-        (data["Years_of_Education"] >= 12) & (data["Years_of_Education"] < 16),
-        "Educ_Level",
-    ] = 1
-    data.loc[data["Years_of_Education"] >= 16, "Educ_Level"] = 2
-
     # Determine the observed wage given period choice
     data["Wage_Observed"] = 0
     data.loc[data["Choice"] == 1, "Wage_Observed"] = data.loc[
