@@ -10,7 +10,7 @@ from python.SimulationBasedEstimation import SimulationBasedEstimationCls
 
 model_params_init_file_name = "resources/model_params.pkl"
 model_spec_init_file_name = "resources/model_spec_init.yml"
-log_file_name_extension = "run_joint"
+log_file_name_extension = "choice_rates"
 
 
 model_params_df = pd.read_pickle(model_params_init_file_name)
@@ -22,6 +22,8 @@ with open("resources/weighting_matrix_ones.pkl", "rb") as f:
     weighting_matrix = pickle.load(f)
 
 constraints = [
+    {"loc": "const_wage_eq", "type": "fixed"},
+    {"loc": "exp_returns", "type": "fixed"},
     {"loc": "exp_accm", "type": "fixed"},
     {"loc": "exp_deprec", "type": "fixed"},
     {"loc": "hetrg_unobs", "type": "fixed"},
@@ -38,7 +40,7 @@ adapter_smm = SimulationBasedEstimationCls(
     log_file_name_extension=log_file_name_extension,
 )
 
-algo_options = {"max_iterations": 2}
+algo_options = {"max_iterations": 2000}
 
 
 result = minimize(
@@ -52,6 +54,6 @@ result = minimize(
 with open("logging/result.pkl", "wb") as f:
     pickle.dump(result, f)
 
-np.testing.assert_almost_equal(
-    53.39610995225749, result[0]["fitness"], 4, "Criterion value mismatch"
-)
+# np.testing.assert_almost_equal(
+#     53.39610995225749, result[0]["fitness"], 4, "Criterion value mismatch"
+# )

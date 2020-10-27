@@ -45,7 +45,7 @@ def create_fig_model_fit():
             temp = [_, value]
             sim_choice_prob.append(temp[1][choice])
 
-        x = np.arange(30)
+        x = np.arange(5, 30)
 
         # Start plot
         ax = plt.figure(figsize=[16, 9]).add_subplot(111)
@@ -74,7 +74,7 @@ def create_fig_model_fit():
         temp = [_, value]
         sim_wages.append(temp[1][0])
 
-    x = np.arange(30)
+    x = np.arange(5, 30)
 
     # Start plot
     ax = plt.figure(figsize=[16, 9]).add_subplot(111)

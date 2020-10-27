@@ -93,7 +93,6 @@ class SimulationBasedEstimationCls:
         stats_obs, stats_sim = [], []
 
         for group in [
-            "Wage_Distribution",
             "Choice_Probability",
         ]:
             for key_ in self.moments_obs[group].keys():
