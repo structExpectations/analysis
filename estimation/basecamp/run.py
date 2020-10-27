@@ -2,7 +2,6 @@
 import pickle
 
 import pandas as pd
-import numpy as np
 
 from estimagic.optimization.optimize import minimize
 from estimation.basecamp.moments_calculation import get_moments

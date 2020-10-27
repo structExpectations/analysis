@@ -16,7 +16,7 @@ def get_moments(data):
     ]:
         moments[group] = dict()
 
-    ## Choice Probabilities
+    # Choice Probabilities
     # Compute moments of the choice probabilities by education
     info = data.groupby(["Period"])["Choice"].value_counts(normalize=True).to_dict()
 
