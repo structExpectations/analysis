@@ -5,8 +5,6 @@ import numpy as np
 
 import soepy
 
-from configurations.analysis_soepy_config import LOGGING_DIR
-
 HUGE_INT = 100000000000
 
 
@@ -22,7 +20,8 @@ class SimulationBasedEstimationCls:
         moments_obs,
         weighting_matrix,
         get_moments,
-        log_file_name_extension,
+        logging_dir=os.getcwd(),
+        log_file_name_extension="",
         max_evals=HUGE_INT,
     ):
 
@@ -33,7 +32,7 @@ class SimulationBasedEstimationCls:
         self.get_moments = get_moments
         self.max_evals = max_evals
         self.log_file_name_extension = log_file_name_extension
-
+        self.logging_dir = logging_dir
         self.num_evals = 0
         self.fval = None
 
@@ -55,7 +54,7 @@ class SimulationBasedEstimationCls:
             self.fval = pd.DataFrame(
                 data, columns=["current", "start", "step"], index=[0]
             )
-            self.params.to_pickle(str(LOGGING_DIR) + "/step.soepy.pkl")
+            self.params.to_pickle(self.logging_dir + "/step.soepy.pkl")
         else:
             is_step = self.fval["step"].iloc[-1] > fval
             step = self.fval["step"].iloc[-1]
@@ -63,7 +62,7 @@ class SimulationBasedEstimationCls:
 
             if is_step:
                 data = {"current": fval, "start": start, "step": fval}
-                self.params.to_pickle(str(LOGGING_DIR) + "/step.soepy.pkl")
+                self.params.to_pickle(self.logging_dir + "/step.soepy.pkl")
             else:
                 data = {"current": fval, "start": start, "step": step}
 
@@ -103,8 +102,6 @@ class SimulationBasedEstimationCls:
 
         fval = float(np.dot(np.dot(stats_dif, self.weighting_matrix), stats_dif))
 
-        print(fval)
-
         return fval, stats_obs, stats_sim
 
     def _logging_smm(self, stats_obs, stats_sim, fval):
@@ -112,17 +109,17 @@ class SimulationBasedEstimationCls:
         that are just relevant for the SMM routine."""
 
         # Save log files in a separate directory
-        if not os.path.exists(str(LOGGING_DIR)):
-            os.makedirs(str(LOGGING_DIR))
+        if not os.path.exists(self.logging_dir):
+            os.makedirs(self.logging_dir)
 
         fname = (
-            str(LOGGING_DIR)
+            self.logging_dir
             + "/monitoring.smm_estimagic."
             + self.log_file_name_extension
             + ".info"
         )
         fname2 = (
-            str(LOGGING_DIR)
+            self.logging_dir
             + "/monitoring_compact.smm_estimagic."
             + self.log_file_name_extension
             + ".info"
