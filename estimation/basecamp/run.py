@@ -54,5 +54,5 @@ with open("logging/result.pkl", "wb") as f:
     pickle.dump(result, f)
 
 # np.testing.assert_almost_equal(
-#     53.39610995225749, result[0]["fitness"], 4, "Criterion value mismatch"
+#     4642.07887028819, result[0]["fitness"], 4, "Criterion value mismatch"
 # )

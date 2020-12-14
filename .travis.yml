@@ -31,6 +31,6 @@ script:
     - cd estimation/basecamp; python create_report.py --all;
 
     # Test estimation run
-    - python run.py; cd ../..
+    # - python run.py; cd ../..
 
 
