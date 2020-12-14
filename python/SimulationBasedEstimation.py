@@ -44,8 +44,6 @@ class SimulationBasedEstimationCls:
         self.params = params_cand
         self.params.drop(columns=["_fixed"], inplace=True, errors="ignore")
 
-        # print(params_cand)
-
         # Obtain criterion function value
         fval, stats_obs, stats_sim = self._calculate_criterion_func_value(params_cand)
 
@@ -93,6 +91,7 @@ class SimulationBasedEstimationCls:
         stats_obs, stats_sim = [], []
 
         for group in [
+            "Wage_Distribution",
             "Choice_Probability",
         ]:
             for key_ in self.moments_obs[group].keys():
