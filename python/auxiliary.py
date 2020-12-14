@@ -26,7 +26,7 @@ def pre_process_soep_data(file_name):
 
     data["Period"] = data.apply(lambda row: get_period(row), axis=1)
 
-    # Determine the observed wage given period choice
+    # Determine the level of education
     def recode_educ_level(row):
         if row["hdegree"] == "Primary/basic vocational":
             return 0
@@ -37,10 +37,9 @@ def pre_process_soep_data(file_name):
         else:
             return np.nan
 
-    data["Educ Level"] = data.apply(lambda row: recode_educ_level(row), axis=1)
+    data["Educ_Level"] = data.apply(lambda row: recode_educ_level(row), axis=1)
 
     # Recode choice
-    # Determine the observed wage given period choice
     def recode_choice(row):
         if row["empchoice"] == "Full-Time":
             return 2
@@ -53,21 +52,17 @@ def pre_process_soep_data(file_name):
 
     data["Choice"] = data.apply(lambda row: recode_choice(row), axis=1)
 
-    # Generate wage for Non-Employment choice
-    data["wage_nw_imp"] = 4.00
-
     # Determine the observed wage given period choice
     def get_observed_wage(row):
         if row["empchoice"] == "Full-Time":
-            return row["wage_ft"]
+            return row["wage_ft"] * 4.5 * 38
         elif row["empchoice"] == "Part-Time":
-            return row["wage_pt"]
-        elif row["empchoice"] == "Non-Working":
-            return row["wage_nw_imp"]
+            return row["wage_pt"] * 4.5 * 18
         else:
-            return np.nan
+            return 700
 
-    data["Wage Observed"] = data.apply(lambda row: get_observed_wage(row), axis=1)
+    data["Wage_Observed"] = data.apply(lambda row: get_observed_wage(row), axis=1)
+    data.loc[(data["Choice"] == 0) & (data["age"] > 27), "Wage_Observed"] = 1000
 
     return data
 
@@ -84,11 +79,11 @@ def get_moments_obs(data):
         moments[group] = dict()
 
     # Compute unconditional moments of the wage distribution
-    info = data.groupby(["Period"])["Wage Observed"].describe().to_dict()
+    info = data.groupby(["Period"])["Wage_Observed"].describe().to_dict()
 
     # Save mean and standard deviation of wages for each period
     # to Wage Distribution section of the moments dictionary
-    for period in range(NUM_PERIODS):
+    for period in range(30):
         moments["Wage_Distribution"][period] = []
         try:
             for label in ["mean", "std"]:
@@ -100,7 +95,7 @@ def get_moments_obs(data):
     # Compute unconditional moments of the choice probabilities
     info = data.groupby(["Period"])["Choice"].value_counts(normalize=True).to_dict()
 
-    for period in range(NUM_PERIODS):
+    for period in range(30):
         moments["Choice_Probability"][period] = []
         for choice in range(3):
             try:
@@ -150,8 +145,7 @@ def get_weighting_matrix(data_frame, num_agents_smm, num_samples):
 
 
 def moments_dict_to_list(moments_dict):
-    """This function constructs a list of available moments
-    based on the moment dictionary."""
+    """This function constructs a list of available moments based on the moment dictionary."""
     moments_list = []
     for group in [
         "Wage_Distribution",
@@ -160,71 +154,6 @@ def moments_dict_to_list(moments_dict):
         for period in sorted(moments_dict[group].keys()):
             moments_list.extend(moments_dict[group][period])
     return moments_list
-
-
-def get_moments(data):
-    # Pre_process data frame
-
-    # Determine the education level given years of experience
-    data["Educ_Level"] = 0
-    data.loc[
-        (data["Years_of_Education"] >= 10) & (data["Years_of_Education"] < 12),
-        "Educ_Level",
-    ] = 0
-    data.loc[
-        (data["Years_of_Education"] >= 12) & (data["Years_of_Education"] < 16),
-        "Educ_Level",
-    ] = 1
-    data.loc[data["Years_of_Education"] >= 16, "Educ_Level"] = 2
-
-    # Determine the observed wage given period choice
-    data["Wage_Observed"] = 0
-    data.loc[data["Choice"] == 0, "Wage_Observed"] = data.loc[
-        data["Choice"] == 0, "Period_Wage_N"
-    ]
-    data.loc[data["Choice"] == 1, "Wage_Observed"] = data.loc[
-        data["Choice"] == 1, "Period_Wage_P"
-    ]
-    data.loc[data["Choice"] == 2, "Wage_Observed"] = data.loc[
-        data["Choice"] == 2, "Period_Wage_F"
-    ]
-
-    # Calculate moments
-
-    # Initialize moments dictionary
-    moments = dict()
-
-    # Store moments in groups as nested dictionary
-    for group in ["Wage_Distribution", "Choice_Probability"]:
-        moments[group] = dict()
-
-    # Compute unconditional moments of the wage distribution
-    info = data.groupby(["Period"])["Wage_Observed"].describe().to_dict()
-
-    # Save mean and standard deviation of wages for each period
-    # to Wage Distribution section of the moments dictionary
-    for period in range(NUM_PERIODS):  # TODO: Remove hard coded number
-        moments["Wage_Distribution"][period] = []
-        try:
-            for label in ["mean", "std"]:
-                moments["Wage_Distribution"][period].append(info[label][period])
-        except KeyError:
-            for i in range(2):
-                moments["Wage_Distribution"][period].append(0.0)
-
-    # Compute unconditional moments of the choice probabilities
-    info = data.groupby(["Period"])["Choice"].value_counts(normalize=True).to_dict()
-
-    for period in range(NUM_PERIODS):  # TODO: Remove hard coded number
-        moments["Choice_Probability"][period] = []
-        for choice in range(3):
-            try:
-                stat = info[(period, choice)]
-            except KeyError:
-                stat = 0.00
-            moments["Choice_Probability"][period].append(stat)
-
-    return moments
 
 
 def prepare_estimation(model_params_init_file_name, lower, upper):
@@ -255,3 +184,49 @@ def get_observed_data_moments_and_weighting(data_file_name):
         pickle.dump(weighting_matrix, f)
 
     return moments_obs, weighting_matrix
+
+
+def get_moments(data):
+
+    # Initialize moments dictionary
+    moments = dict()
+
+    # Store moments in groups as nested dictionary
+    for group in [
+        "Wage_Distribution",
+        "Choice_Probability",
+    ]:
+        moments[group] = dict()
+
+    # Compute unconditional moments of the wage distribution
+    info = (
+        data[data["Choice"] != 0]
+        .groupby(["Period"])["Wage_Observed"]
+        .describe()
+        .to_dict()
+    )
+
+    # Save mean and standard deviation of wages for each period
+    # to Wage Distribution section of the moments dictionary
+    for period in range(39):
+        moments["Wage_Distribution"][period] = []
+        try:
+            for label in ["mean", "std"]:
+                moments["Wage_Distribution"][period].append(info[label][period])
+        except KeyError:
+            for i in range(2):
+                moments["Wage_Distribution"][period].append(0.0)
+
+    # Compute unconditional moments of the choice probabilities
+    info = data.groupby(["Period"])["Choice"].value_counts(normalize=True).to_dict()
+
+    for period in range(39):  # TODO: Remove hard coded number
+        moments["Choice_Probability"][period] = []
+        for choice in range(3):
+            try:
+                stat = info[(period, choice)]
+            except KeyError:
+                stat = 0.00
+            moments["Choice_Probability"][period].append(stat)
+
+    return moments

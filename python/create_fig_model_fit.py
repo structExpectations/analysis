@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 
 import soepy
 from configurations.analysis_soepy_config import (
-    LOGGING_DIR,
     RESOURCES_DIR,
     FIGURES_DIR,
 )
@@ -17,7 +16,7 @@ def create_fig_model_fit():
     """Plots simulated against observed moments"""
 
     # Get simulated moments
-    model_params = pd.read_pickle(LOGGING_DIR / "step.soepy.pkl")
+    model_params = pd.read_pickle(str(RESOURCES_DIR) + "/model_params.pkl")
     model_params = model_params.drop(model_params.columns[1:], axis=1)
     data_sim = soepy.simulate(
         model_params, str(RESOURCES_DIR) + "/model_spec_init.yml", is_expected=False
@@ -46,7 +45,7 @@ def create_fig_model_fit():
             temp = [_, value]
             sim_choice_prob.append(temp[1][choice])
 
-        x = np.arange(30)
+        x = np.arange(39)
 
         # Start plot
         ax = plt.figure(figsize=[16, 9]).add_subplot(111)
@@ -60,7 +59,6 @@ def create_fig_model_fit():
 
         plt.savefig(
             str(FIGURES_DIR) + "/choice_prob_" + str(choice) + ".pdf",
-            ax=ax,
             bbox_inches="tight",
         )
         plt.close()
@@ -76,7 +74,7 @@ def create_fig_model_fit():
         temp = [_, value]
         sim_wages.append(temp[1][0])
 
-    x = np.arange(30)
+    x = np.arange(39)
 
     # Start plot
     ax = plt.figure(figsize=[16, 9]).add_subplot(111)
@@ -88,5 +86,5 @@ def create_fig_model_fit():
 
     ax.legend(["Simulated", "Observed"])
 
-    plt.savefig(str(FIGURES_DIR) + "/wages.pdf", ax=ax, bbox_inches="tight")
+    plt.savefig(str(FIGURES_DIR) + "/wages.pdf", bbox_inches="tight")
     plt.close()

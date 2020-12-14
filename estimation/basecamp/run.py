@@ -2,15 +2,14 @@
 import pickle
 
 import pandas as pd
-import numpy as np
 
 from estimagic.optimization.optimize import minimize
 from estimation.basecamp.moments_calculation import get_moments
 from python.SimulationBasedEstimation import SimulationBasedEstimationCls
 
-model_params_init_file_name = "resources/toy_model_init_file_03_2types.pkl"
+model_params_init_file_name = "resources/model_params.pkl"
 model_spec_init_file_name = "resources/model_spec_init.yml"
-log_file_name_extension = "test"
+log_file_name_extension = "xx"
 
 
 model_params_df = pd.read_pickle(model_params_init_file_name)
@@ -18,8 +17,18 @@ model_params_df = pd.read_pickle(model_params_init_file_name)
 with open("resources/moments_obs.pkl", "rb") as f:
     moments_obs = pickle.load(f)
 
-with open("resources/weighting_matrix.pkl", "rb") as f:
+with open("resources/weighting_matrix_ones.pkl", "rb") as f:
     weighting_matrix = pickle.load(f)
+
+# constraints = [
+#     {"loc": "const_wage_eq", "type": "fixed"},
+#     {"loc": "exp_returns", "type": "fixed"},
+#     {"loc": "exp_accm", "type": "fixed"},
+#     {"loc": "exp_deprec", "type": "fixed"},
+#     {"loc": "hetrg_unobs", "type": "fixed"},
+#     {"loc": "shares", "type": "fixed"},
+#     {"loc": "sd_wage_shock", "type": "fixed"},
+# ]
 
 adapter_smm = SimulationBasedEstimationCls(
     params=model_params_df,
@@ -30,16 +39,20 @@ adapter_smm = SimulationBasedEstimationCls(
     log_file_name_extension=log_file_name_extension,
 )
 
-algo_options = {"stopeval": 1e-14, "maxeval": 1}
+algo_options = {"max_iterations": 2000}
 
 
 result = minimize(
     criterion=adapter_smm.get_objective,
     params=adapter_smm.params,
-    algorithm="nlopt_bobyqa",
+    algorithm="scipy_powell",
     algo_options=algo_options,
+    # constraints=constraints,
 )
 
-np.testing.assert_almost_equal(
-    11356.971245152485, result[0]["fitness"], 6, "Criterion value mismatch"
-)
+with open("logging/result.pkl", "wb") as f:
+    pickle.dump(result, f)
+
+# np.testing.assert_almost_equal(
+#     4642.07887028819, result[0]["fitness"], 4, "Criterion value mismatch"
+# )
