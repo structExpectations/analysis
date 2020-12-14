@@ -186,19 +186,7 @@ def get_observed_data_moments_and_weighting(data_file_name):
     return moments_obs, weighting_matrix
 
 
-def get_moments(data, is_store=False):
-    # Pre_process data frame
-
-    # Determine the observed wage given period choice
-    data["Wage_Observed"] = 0
-    data.loc[data["Choice"] == 1, "Wage_Observed"] = data.loc[
-        data["Choice"] == 1, "Period_Wage_P"
-    ]
-    data.loc[data["Choice"] == 2, "Wage_Observed"] = data.loc[
-        data["Choice"] == 2, "Period_Wage_F"
-    ]
-
-    # Calculate moments
+def get_moments(data):
 
     # Initialize moments dictionary
     moments = dict()
@@ -220,7 +208,7 @@ def get_moments(data, is_store=False):
 
     # Save mean and standard deviation of wages for each period
     # to Wage Distribution section of the moments dictionary
-    for period in range(5, 30):  # TODO: Remove hard coded number
+    for period in range(39):
         moments["Wage_Distribution"][period] = []
         try:
             for label in ["mean", "std"]:
@@ -232,7 +220,7 @@ def get_moments(data, is_store=False):
     # Compute unconditional moments of the choice probabilities
     info = data.groupby(["Period"])["Choice"].value_counts(normalize=True).to_dict()
 
-    for period in range(5, 30):  # TODO: Remove hard coded number
+    for period in range(39):  # TODO: Remove hard coded number
         moments["Choice_Probability"][period] = []
         for choice in range(3):
             try:
@@ -240,8 +228,5 @@ def get_moments(data, is_store=False):
             except KeyError:
                 stat = 0.00
             moments["Choice_Probability"][period].append(stat)
-
-    if is_store:
-        pickle.dump(moments, open("moments.soepy.pkl", "wb"))
 
     return moments
