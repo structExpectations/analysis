@@ -101,10 +101,8 @@ class SimulationBasedEstimationCls:
 
         # Construct criterion value
         stats_dif = stats_obs - stats_sim
-        print(stats_dif)
 
         fval = float(np.dot(np.dot(stats_dif, self.weighting_matrix), stats_dif))
-        print(fval)
 
         return fval, stats_obs, stats_sim
 

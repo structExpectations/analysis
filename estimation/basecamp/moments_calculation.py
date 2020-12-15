@@ -50,9 +50,9 @@ def get_moments(data):
     return moments
 
 
-def transitions_out_to_in(data_subset):
+def transitions_out_to_in(data_subset, num_periods):
     counts_list = []
-    for period in np.arange(1, 39):
+    for period in np.arange(1, num_periods):
         # get period IDs:
         period_employed_ids = data_subset[
             (data_subset["Period"] == period) & (data_subset["Choice"] != 0)
@@ -82,9 +82,9 @@ def transitions_out_to_in(data_subset):
     return avg
 
 
-def transitions_out_to_in_mothers(data_subset):
+def transitions_out_to_in_mothers(data_subset, num_periods):
     counts_list = []
-    for period in np.arange(1, 28):
+    for period in np.arange(1, min(28, num_periods)):
         # get period IDs:
         period_employed_ids = data_subset[
             (data_subset["Period"] == period) & (data_subset["Choice"] != 0)
@@ -114,9 +114,9 @@ def transitions_out_to_in_mothers(data_subset):
     return avg
 
 
-def transitions_in_to_out(data_subset):
+def transitions_in_to_out(data_subset, num_periods):
     counts_list = []
-    for period in np.arange(1, 39):
+    for period in np.arange(1, num_periods):
         # get period IDs:
         period_unemployed_ids = data_subset[
             (data_subset["Period"] == period) & (data_subset["Choice"] == 0)
@@ -146,9 +146,9 @@ def transitions_in_to_out(data_subset):
     return avg
 
 
-def transitions_in_to_out_mothers(data_subset):
+def transitions_in_to_out_mothers(data_subset, num_periods):
     counts_list = []
-    for period in np.arange(1, 28):
+    for period in np.arange(1, min(28, num_periods)):
         # get period IDs:
         period_unemployed_ids = data_subset[
             (data_subset["Period"] == period) & (data_subset["Choice"] == 0)
@@ -178,9 +178,9 @@ def transitions_in_to_out_mothers(data_subset):
     return avg
 
 
-def transitions_in_to_out_deciles(data, decile):
+def transitions_in_to_out_deciles(data, decile, num_periods):
     counts_list = []
-    for period in np.arange(1, 39):
+    for period in np.arange(1, num_periods):
         # get period IDs:
         period_unemployed_ids = data[
             (data["Period"] == period) & (data["Choice"] == 0)
@@ -212,6 +212,8 @@ def transitions_in_to_out_deciles(data, decile):
 
 
 def get_moments_disutility(data):
+
+    num_periods = data["Period"].max() + 1
     moments = dict()
 
     # Store moments in groups as nested dictionary
@@ -238,7 +240,7 @@ def get_moments_disutility(data):
             ]
             .groupby(["Education_Level"])["Identifier"]
             .count()
-        ).values
+        ).to_list()
     )
     # Married no child
     moments["Employment_Shares"]["All_Employment"].append(
@@ -439,64 +441,64 @@ def get_moments_disutility(data):
     moments["Transitions"]["Out_To_In"] = []
 
     # All
-    avg = transitions_out_to_in(data)
+    avg = transitions_out_to_in(data, num_periods)
     moments["Transitions"]["Out_To_In"].append(avg)
 
     # Women with no children
     data_subset = data[data["Age_Youngest_Child"] == -1]
-    avg = transitions_out_to_in(data_subset)
+    avg = transitions_out_to_in(data_subset, num_periods)
     moments["Transitions"]["Out_To_In"].append(avg)
 
     # Lone mothers
     data_subset = data[
         (data["Age_Youngest_Child"] != -1) & (data["Partner_Indicator"] == 0)
     ]
-    avg = transitions_out_to_in_mothers(data_subset)
+    avg = transitions_out_to_in_mothers(data_subset, num_periods)
     moments["Transitions"]["Out_To_In"].append(avg)
 
     # Married mothers
     data_subset = data[
         (data["Age_Youngest_Child"] != -1) & (data["Partner_Indicator"] == 1)
     ]
-    avg = transitions_out_to_in_mothers(data_subset)
+    avg = transitions_out_to_in_mothers(data_subset, num_periods)
     moments["Transitions"]["Out_To_In"].append(avg)
 
     # Transition rates from employment to out of work by education
     moments["Transitions"]["In_To_Out"] = []
 
     # All
-    avg = transitions_in_to_out(data)
+    avg = transitions_in_to_out(data, num_periods)
     moments["Transitions"]["In_To_Out"].append(avg)
 
     # Women with no children
     data_subset = data[data["Age_Youngest_Child"] == -1]
-    avg = transitions_in_to_out(data_subset)
+    avg = transitions_in_to_out(data_subset, num_periods)
     moments["Transitions"]["In_To_Out"].append(avg)
 
     # Lone mothers
     data_subset = data[
         (data["Age_Youngest_Child"] != -1) & (data["Partner_Indicator"] == 0)
     ]
-    avg = transitions_in_to_out_mothers(data_subset)
+    avg = transitions_in_to_out_mothers(data_subset, num_periods)
     moments["Transitions"]["In_To_Out"].append(avg)
 
     # Married mothers
     data_subset = data[
         (data["Age_Youngest_Child"] != -1) & (data["Partner_Indicator"] == 1)
     ]
-    avg = transitions_in_to_out_mothers(data_subset)
+    avg = transitions_in_to_out_mothers(data_subset, num_periods)
     moments["Transitions"]["In_To_Out"].append(avg)
 
     # Past wage in bottom decile
-    avg = transitions_in_to_out_deciles(data, 0.1)
+    avg = transitions_in_to_out_deciles(data, 0.1, num_periods)
     moments["Transitions"]["In_To_Out"].append(avg)
 
     # Past wage below median
-    avg = transitions_in_to_out_deciles(data, 0.5)
+    avg = transitions_in_to_out_deciles(data, 0.5, num_periods)
     moments["Transitions"]["In_To_Out"].append(avg)
 
     # Past wage below 90th percentile
-    avg = transitions_in_to_out_deciles(data, 0.9)
+    avg = transitions_in_to_out_deciles(data, 0.9, num_periods)
     moments["Transitions"]["In_To_Out"].append(avg)
 
     return moments
