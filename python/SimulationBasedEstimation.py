@@ -97,6 +97,8 @@ class SimulationBasedEstimationCls:
         stats_obs = np.ndarray.flatten(np.array(stats_obs))
         stats_sim = np.ndarray.flatten(np.array(stats_sim))
 
+        stats_sim = np.where(np.isnan(stats_sim), stats_obs, stats_sim)
+
         # Construct criterion value
         stats_dif = stats_obs - stats_sim
         print(stats_dif)
