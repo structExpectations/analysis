@@ -94,12 +94,15 @@ class SimulationBasedEstimationCls:
                 stats_obs.extend(self.moments_obs[group][key_])
                 stats_sim.extend(moments_sim[group][key_])
 
+        stats_obs = np.ndarray.flatten(np.array(stats_obs))
+        stats_sim = np.ndarray.flatten(np.array(stats_sim))
+
         # Construct criterion value
-        stats_dif = np.ndarray.flatten(np.array(stats_obs)) - np.ndarray.flatten(
-            np.array(stats_sim)
-        )
+        stats_dif = stats_obs - stats_sim
+        print(stats_dif)
 
         fval = float(np.dot(np.dot(stats_dif, self.weighting_matrix), stats_dif))
+        print(fval)
 
         return fval, stats_obs, stats_sim
 
