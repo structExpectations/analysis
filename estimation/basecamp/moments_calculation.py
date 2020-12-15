@@ -1,6 +1,8 @@
 """This module contains functions to calculate the moments based on the simulated
 data."""
 
+import numpy as np
+
 
 def get_moments(data):
 
@@ -44,5 +46,459 @@ def get_moments(data):
             except KeyError:
                 stat = 0.00
             moments["Choice_Probability"][period].append(stat)
+
+    return moments
+
+
+def transitions_out_to_in(data_subset, num_periods):
+    counts_list = []
+    for period in np.arange(1, num_periods):
+        # get period IDs:
+        period_employed_ids = data_subset[
+            (data_subset["Period"] == period) & (data_subset["Choice"] != 0)
+        ]["Identifier"].to_list()
+        transition_ids = data_subset[
+            (data_subset["Period"] == period - 1)
+            & (data_subset["Identifier"].isin(period_employed_ids))
+            & (data_subset["Choice"] == 0)
+        ]["Identifier"].to_list()
+        period_counts = (
+            (
+                data_subset[
+                    (data_subset["Period"] == period)
+                    & (data_subset["Identifier"].isin(transition_ids))
+                ]
+                .groupby(["Education_Level"])["Identifier"]
+                .count()
+                / data_subset[(data_subset["Period"] == period)]
+                .groupby(["Education_Level"])["Identifier"]
+                .count()
+            )
+            .fillna(0)
+            .to_list()
+        )
+        counts_list += [period_counts]
+    avg = [float(sum(col)) / len(col) for col in zip(*counts_list)]
+    return avg
+
+
+def transitions_out_to_in_mothers(data_subset, num_periods):
+    counts_list = []
+    for period in np.arange(1, min(28, num_periods)):
+        # get period IDs:
+        period_employed_ids = data_subset[
+            (data_subset["Period"] == period) & (data_subset["Choice"] != 0)
+        ]["Identifier"].to_list()
+        transition_ids = data_subset[
+            (data_subset["Period"] == period - 1)
+            & (data_subset["Identifier"].isin(period_employed_ids))
+            & (data_subset["Choice"] == 0)
+        ]["Identifier"].to_list()
+        period_counts = (
+            (
+                data_subset[
+                    (data_subset["Period"] == period)
+                    & (data_subset["Identifier"].isin(transition_ids))
+                ]
+                .groupby(["Education_Level"])["Identifier"]
+                .count()
+                / data_subset[(data_subset["Period"] == period)]
+                .groupby(["Education_Level"])["Identifier"]
+                .count()
+            )
+            .fillna(0)
+            .to_list()
+        )
+        counts_list += [period_counts]
+    avg = [float(sum(col)) / len(col) for col in zip(*counts_list)]
+    return avg
+
+
+def transitions_in_to_out(data_subset, num_periods):
+    counts_list = []
+    for period in np.arange(1, num_periods):
+        # get period IDs:
+        period_unemployed_ids = data_subset[
+            (data_subset["Period"] == period) & (data_subset["Choice"] == 0)
+        ]["Identifier"].to_list()
+        transition_ids = data_subset[
+            (data_subset["Period"] == period - 1)
+            & (data_subset["Identifier"].isin(period_unemployed_ids))
+            & (data_subset["Choice"] != 0)
+        ]["Identifier"].to_list()
+        period_counts = (
+            (
+                data_subset[
+                    (data_subset["Period"] == period)
+                    & (data_subset["Identifier"].isin(transition_ids))
+                ]
+                .groupby(["Education_Level"])["Identifier"]
+                .count()
+                / data_subset[(data_subset["Period"] == period)]
+                .groupby(["Education_Level"])["Identifier"]
+                .count()
+            )
+            .fillna(0)
+            .to_list()
+        )
+        counts_list += [period_counts]
+    avg = [float(sum(col)) / len(col) for col in zip(*counts_list)]
+    return avg
+
+
+def transitions_in_to_out_mothers(data_subset, num_periods):
+    counts_list = []
+    for period in np.arange(1, min(28, num_periods)):
+        # get period IDs:
+        period_unemployed_ids = data_subset[
+            (data_subset["Period"] == period) & (data_subset["Choice"] == 0)
+        ]["Identifier"].to_list()
+        transition_ids = data_subset[
+            (data_subset["Period"] == period - 1)
+            & (data_subset["Identifier"].isin(period_unemployed_ids))
+            & (data_subset["Choice"] != 0)
+        ]["Identifier"].to_list()
+        period_counts = (
+            (
+                data_subset[
+                    (data_subset["Period"] == period)
+                    & (data_subset["Identifier"].isin(transition_ids))
+                ]
+                .groupby(["Education_Level"])["Identifier"]
+                .count()
+                / data_subset[(data_subset["Period"] == period)]
+                .groupby(["Education_Level"])["Identifier"]
+                .count()
+            )
+            .fillna(0)
+            .to_list()
+        )
+        counts_list += [period_counts]
+    avg = [float(sum(col)) / len(col) for col in zip(*counts_list)]
+    return avg
+
+
+def transitions_in_to_out_deciles(data, decile, num_periods):
+    counts_list = []
+    for period in np.arange(1, num_periods):
+        # get period IDs:
+        period_unemployed_ids = data[
+            (data["Period"] == period) & (data["Choice"] == 0)
+        ]["Identifier"].to_list()
+        transition_ids = data[
+            (data["Period"] == period - 1)
+            & (data["Identifier"].isin(period_unemployed_ids))
+            & (data["Wage_Observed"] < data["Wage_Observed"].quantile(decile))
+        ]["Identifier"].to_list()
+        period_counts = (
+            (
+                data[
+                    (data["Period"] == period)
+                    & (data["Identifier"].isin(transition_ids))
+                ]
+                .groupby(["Education_Level"])["Identifier"]
+                .count()
+                / data[(data["Period"] == period)]
+                .groupby(["Education_Level"])["Identifier"]
+                .count()
+            )
+            .fillna(0)
+            .to_list()
+        )
+        counts_list += [period_counts]
+    avg = [float(sum(col)) / len(col) for col in zip(*counts_list)]
+
+    return avg
+
+
+def get_moments_disutility(data):
+
+    num_periods = data["Period"].max() + 1
+    moments = dict()
+
+    # Store moments in groups as nested dictionary
+    for group in [
+        "Employment_Shares",
+        "Transitions",
+    ]:
+        moments[group] = dict()
+
+    # All employment
+    moments["Employment_Shares"]["All_Employment"] = []
+    # Single no child
+    moments["Employment_Shares"]["All_Employment"].append(
+        (
+            data[
+                (data["Partner_Indicator"] == 0)
+                & (data["Age_Youngest_Child"] == -1)
+                & (data["Choice"] != 0)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[
+                (data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] == -1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Married no child
+    moments["Employment_Shares"]["All_Employment"].append(
+        (
+            data[
+                (data["Partner_Indicator"] == 1)
+                & (data["Age_Youngest_Child"] == -1)
+                & (data["Choice"] != 0)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[
+                (data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] == -1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Lone mothers
+    moments["Employment_Shares"]["All_Employment"].append(
+        (
+            data[
+                (data["Partner_Indicator"] == 0)
+                & (data["Age_Youngest_Child"] != -1)
+                & (data["Choice"] != 0)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[
+                (data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] != -1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Married mothers
+    moments["Employment_Shares"]["All_Employment"].append(
+        (
+            data[
+                (data["Partner_Indicator"] == 1)
+                & (data["Age_Youngest_Child"] != -1)
+                & (data["Choice"] != 0)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[
+                (data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] != -1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Child 0-2
+    moments["Employment_Shares"]["All_Employment"].append(
+        (
+            data[(data["Age_Youngest_Child"].isin([0, 1, 2])) & (data["Choice"] != 0)]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[(data["Age_Youngest_Child"].isin([0, 1, 2]))]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Child 3-5
+    moments["Employment_Shares"]["All_Employment"].append(
+        (
+            data[(data["Age_Youngest_Child"].isin([3, 4, 5])) & (data["Choice"] != 0)]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[(data["Age_Youngest_Child"].isin([3, 4, 5]))]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Child 6-10
+    moments["Employment_Shares"]["All_Employment"].append(
+        (
+            data[
+                (data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10]))
+                & (data["Choice"] != 0)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[(data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10]))]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+
+    # Part-time employment
+    moments["Employment_Shares"]["Part_Time_Employment"] = []
+    # Single no child
+    moments["Employment_Shares"]["Part_Time_Employment"].append(
+        (
+            data[
+                (data["Partner_Indicator"] == 0)
+                & (data["Age_Youngest_Child"] == -1)
+                & (data["Choice"] == 1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[
+                (data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] == -1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Married no child
+    moments["Employment_Shares"]["Part_Time_Employment"].append(
+        (
+            data[
+                (data["Partner_Indicator"] == 1)
+                & (data["Age_Youngest_Child"] == -1)
+                & (data["Choice"] == 1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[
+                (data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] == -1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Lone mothers
+    moments["Employment_Shares"]["Part_Time_Employment"].append(
+        (
+            data[
+                (data["Partner_Indicator"] == 0)
+                & (data["Age_Youngest_Child"] != -1)
+                & (data["Choice"] == 1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[
+                (data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] != -1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Married mothers
+    moments["Employment_Shares"]["Part_Time_Employment"].append(
+        (
+            data[
+                (data["Partner_Indicator"] == 1)
+                & (data["Age_Youngest_Child"] != -1)
+                & (data["Choice"] == 1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[
+                (data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] != -1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Child 0-2
+    moments["Employment_Shares"]["Part_Time_Employment"].append(
+        (
+            data[(data["Age_Youngest_Child"].isin([0, 1, 2])) & (data["Choice"] == 1)]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[(data["Age_Youngest_Child"].isin([0, 1, 2]))]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Child 3-5
+    moments["Employment_Shares"]["Part_Time_Employment"].append(
+        (
+            data[(data["Age_Youngest_Child"].isin([3, 4, 5])) & (data["Choice"] == 1)]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[(data["Age_Youngest_Child"].isin([3, 4, 5]))]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+    # Child 6-10
+    moments["Employment_Shares"]["Part_Time_Employment"].append(
+        (
+            data[
+                (data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10]))
+                & (data["Choice"] == 1)
+            ]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+            / data[(data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10]))]
+            .groupby(["Education_Level"])["Identifier"]
+            .count()
+        ).to_list()
+    )
+
+    # Transition rates from out of work into work by education
+    moments["Transitions"]["Out_To_In"] = []
+
+    # All
+    avg = transitions_out_to_in(data, num_periods)
+    moments["Transitions"]["Out_To_In"].append(avg)
+
+    # Women with no children
+    data_subset = data[data["Age_Youngest_Child"] == -1]
+    avg = transitions_out_to_in(data_subset, num_periods)
+    moments["Transitions"]["Out_To_In"].append(avg)
+
+    # Lone mothers
+    data_subset = data[
+        (data["Age_Youngest_Child"] != -1) & (data["Partner_Indicator"] == 0)
+    ]
+    avg = transitions_out_to_in_mothers(data_subset, num_periods)
+    moments["Transitions"]["Out_To_In"].append(avg)
+
+    # Married mothers
+    data_subset = data[
+        (data["Age_Youngest_Child"] != -1) & (data["Partner_Indicator"] == 1)
+    ]
+    avg = transitions_out_to_in_mothers(data_subset, num_periods)
+    moments["Transitions"]["Out_To_In"].append(avg)
+
+    # Transition rates from employment to out of work by education
+    moments["Transitions"]["In_To_Out"] = []
+
+    # All
+    avg = transitions_in_to_out(data, num_periods)
+    moments["Transitions"]["In_To_Out"].append(avg)
+
+    # Women with no children
+    data_subset = data[data["Age_Youngest_Child"] == -1]
+    avg = transitions_in_to_out(data_subset, num_periods)
+    moments["Transitions"]["In_To_Out"].append(avg)
+
+    # Lone mothers
+    data_subset = data[
+        (data["Age_Youngest_Child"] != -1) & (data["Partner_Indicator"] == 0)
+    ]
+    avg = transitions_in_to_out_mothers(data_subset, num_periods)
+    moments["Transitions"]["In_To_Out"].append(avg)
+
+    # Married mothers
+    data_subset = data[
+        (data["Age_Youngest_Child"] != -1) & (data["Partner_Indicator"] == 1)
+    ]
+    avg = transitions_in_to_out_mothers(data_subset, num_periods)
+    moments["Transitions"]["In_To_Out"].append(avg)
+
+    # Past wage in bottom decile
+    avg = transitions_in_to_out_deciles(data, 0.1, num_periods)
+    moments["Transitions"]["In_To_Out"].append(avg)
+
+    # Past wage below median
+    avg = transitions_in_to_out_deciles(data, 0.5, num_periods)
+    moments["Transitions"]["In_To_Out"].append(avg)
+
+    # Past wage below 90th percentile
+    avg = transitions_in_to_out_deciles(data, 0.9, num_periods)
+    moments["Transitions"]["In_To_Out"].append(avg)
 
     return moments
