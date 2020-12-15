@@ -20,15 +20,15 @@ with open("resources/moments_obs.pkl", "rb") as f:
 with open("resources/weighting_matrix_ones.pkl", "rb") as f:
     weighting_matrix = pickle.load(f)
 
-# constraints = [
-#     {"loc": "const_wage_eq", "type": "fixed"},
-#     {"loc": "exp_returns", "type": "fixed"},
-#     {"loc": "exp_accm", "type": "fixed"},
-#     {"loc": "exp_deprec", "type": "fixed"},
-#     {"loc": "hetrg_unobs", "type": "fixed"},
-#     {"loc": "shares", "type": "fixed"},
-#     {"loc": "sd_wage_shock", "type": "fixed"},
-# ]
+constraints = [
+    {"loc": "const_wage_eq", "type": "fixed"},
+    {"loc": "exp_returns", "type": "fixed"},
+    {"loc": "exp_accm", "type": "fixed"},
+    {"loc": "exp_deprec", "type": "fixed"},
+    {"loc": "hetrg_unobs", "type": "fixed"},
+    {"loc": "shares", "type": "fixed"},
+    {"loc": "sd_wage_shock", "type": "fixed"},
+]
 
 adapter_smm = SimulationBasedEstimationCls(
     params=model_params_df,
@@ -47,7 +47,7 @@ result = minimize(
     params=adapter_smm.params,
     algorithm="scipy_powell",
     algo_options=algo_options,
-    # constraints=constraints,
+    constraints=constraints,
 )
 
 with open("logging/result.pkl", "wb") as f:
