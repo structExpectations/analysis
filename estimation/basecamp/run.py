@@ -14,7 +14,7 @@ model_spec_init_file_name = "resources/model_spec_init.yml"
 
 model_params_df = pd.read_pickle(model_params_init_file_name)
 
-with open("resources/moments_obs.pkl", "rb") as f:
+with open("resources/moments_obs_disutility.pkl", "rb") as f:
     moments_obs = pickle.load(f)
 
 with open("resources/weighting_matrix_ones.pkl", "rb") as f:
