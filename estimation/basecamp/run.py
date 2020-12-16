@@ -4,7 +4,7 @@ import pickle
 import pandas as pd
 
 from estimagic.optimization.optimize import minimize
-from estimation.basecamp.moments_calculation import get_moments_disutility
+from estimation.basecamp.moments_calculation import get_moments
 from python.SimulationBasedEstimation import SimulationBasedEstimationCls
 from configurations.analysis_soepy_config import LOGGING_DIR
 
@@ -14,10 +14,10 @@ model_spec_init_file_name = "resources/model_spec_init.yml"
 
 model_params_df = pd.read_pickle(model_params_init_file_name)
 
-with open("resources/moments_obs_disutility.pkl", "rb") as f:
+with open("resources/moments_obs.pkl", "rb") as f:
     moments_obs = pickle.load(f)
 
-with open("resources/weighting_matrix_ones.pkl", "rb") as f:
+with open("resources/weighting_matrix.pkl", "rb") as f:
     weighting_matrix = pickle.load(f)
 
 constraints = [
@@ -35,11 +35,11 @@ adapter_smm = SimulationBasedEstimationCls(
     model_spec_init_file_name=model_spec_init_file_name,
     moments_obs=moments_obs,
     weighting_matrix=weighting_matrix,
-    get_moments=get_moments_disutility,
+    get_moments=get_moments,
     logging_dir=str(LOGGING_DIR),
 )
 
-algo_options = {"max_iterations": 2000}
+algo_options = {"max_iterations": 10000}
 
 
 result = minimize(
