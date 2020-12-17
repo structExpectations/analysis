@@ -28,9 +28,9 @@ script:
     - py.test
 
     # Test report
-    - cd estimation/basecamp; python create_report.py --all;
+    - cd estimation/basecamp; python create_report.py --all; cd ../..
 
     # Test estimation run
-    # - python run.py; cd ../..
+    - cd estimation/template-pybobyqa; python run.py
 
 

@@ -22,6 +22,7 @@ dependencies:
   - flake8
   - sphinx-autobuild
   - pip:
+    - Py-BOBYQA
     - black
     - pre-commit
     - PyPDF2
