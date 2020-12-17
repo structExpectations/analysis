@@ -65,12 +65,12 @@ def create_fig_model_fit():
 
     # Plot wages
     obs_wages = []
-    for _, value in moments_obs["Wage_Distribution"].items():
+    for _, value in moments_obs["Wage_Distribution_Educ_Low"].items():
         temp = [_, value]
         obs_wages.append(temp[1][0])
 
     sim_wages = []
-    for _, value in moments_sim["Wage_Distribution"].items():
+    for _, value in moments_sim["Wage_Distribution_Educ_Low"].items():
         temp = [_, value]
         sim_wages.append(temp[1][0])
 

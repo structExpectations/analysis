@@ -46,6 +46,11 @@ class SimulationBasedEstimationCls:
         # Obtain criterion function value
         fval, stats_obs, stats_sim = self._calculate_criterion_func_value(params_cand)
 
+        # We need to prepare logging in a separate directory. This needs to be done here so the
+        # parameterization at the start can be saved there right away.
+        if not os.path.exists(self.logging_dir):
+            os.makedirs(self.logging_dir)
+
         # Save params and function value as pickle object.
         is_start = self.fval is None
 
@@ -111,11 +116,6 @@ class SimulationBasedEstimationCls:
     def _logging_smm(self, stats_obs, stats_sim, fval):
         """This method contains logging capabilities
         that are just relevant for the SMM routine."""
-
-        # Save log files in a separate directory
-        if not os.path.exists(self.logging_dir):
-            os.makedirs(self.logging_dir)
-
         fname = (
             self.logging_dir
             + "/monitoring.smm_estimagic."

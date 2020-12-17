@@ -21,13 +21,10 @@ with open("resources/weighting_matrix.pkl", "rb") as f:
     weighting_matrix = pickle.load(f)
 
 constraints = [
-    {"loc": "const_wage_eq", "type": "fixed"},
-    {"loc": "exp_returns", "type": "fixed"},
-    {"loc": "exp_accm", "type": "fixed"},
     {"loc": "exp_deprec", "type": "fixed"},
     {"loc": "hetrg_unobs", "type": "fixed"},
     {"loc": "shares", "type": "fixed"},
-    {"loc": "sd_wage_shock", "type": "fixed"},
+    {"loc": "disutil_work", "type": "fixed"},
 ]
 
 adapter_smm = SimulationBasedEstimationCls(
