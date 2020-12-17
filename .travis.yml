@@ -27,10 +27,5 @@ script:
     # pytest submodules
     - py.test
 
-    # Test report
-    - cd estimation/basecamp; python create_report.py --all; cd ../..
-
-    # Test estimation run
-    - cd estimation/template-pybobyqa; python run.py
-
-
+    # Test estimation run and report
+    - cd estimation/basecamp; python pybobyqa_run.py.py; python create_report.py --all

@@ -8,14 +8,14 @@ import numpy as np
 
 from SimulationBasedEstimation import SimulationBasedEstimationCls
 
-from global_auxiliary import prepare_optimizer_interface
-from global_auxiliary import wrapper_numpy
-from global_moments import get_moments
+from pybobyqa_auxiliary import prepare_optimizer_interface
+from pybobyqa_auxiliary import wrapper_numpy
+from moments_calculation import get_moments
 
 model_spec_fname = "resources/model_spec_init.yml"
 model_para_fname = "resources/model_params.pkl"
 
-weighting_matrix = pickle.load(open("resources/weighting_matrix_ones.pkl", "rb"))
+weighting_matrix = pickle.load(open("resources/weighting_matrix.pkl", "rb"))
 moments_obs = pickle.load(open("resources/moments_obs.pkl", "rb"))
 model_params = pd.read_pickle(model_para_fname)
 
@@ -45,4 +45,4 @@ adapter_smm = SimulationBasedEstimationCls(**adapter_kwargs)
 x0, bounds = prepare_optimizer_interface(model_params)
 p_wrapper_numpy = partial(wrapper_numpy, model_params, adapter_smm)
 rslt = pybob.solve(p_wrapper_numpy, x0, bounds=bounds, **opt_kwargs)
-np.testing.assert_almost_equal(rslt.f, 4642.07887028819)
+np.testing.assert_almost_equal(rslt.f, 1353330.897933348)
