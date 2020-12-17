@@ -21,8 +21,11 @@ model_params = pd.read_pickle(model_para_fname)
 
 # We need to add the information which parameters are fixed, which are free. We fix all
 # parameters as the default and then free the relevant set.
-model_params["fixed"] = True
-model_params.loc[("const_wage_eq", "gamma_0s1"), "fixed"] = False
+model_params["fixed"] = False
+model_params.loc[("exp_accm"), "fixed"] = True
+model_params.loc[("exp_deprec"), "fixed"] = True
+model_params.loc[("hetrg_unobs"), "fixed"] = True
+model_params.loc[("shares"), "fixed"] = True
 
 # We set the tuning parameters of the optimizer so that it runs forever.
 opt_kwargs = dict()
@@ -45,4 +48,4 @@ adapter_smm = SimulationBasedEstimationCls(**adapter_kwargs)
 x0, bounds = prepare_optimizer_interface(model_params)
 p_wrapper_numpy = partial(wrapper_numpy, model_params, adapter_smm)
 rslt = pybob.solve(p_wrapper_numpy, x0, bounds=bounds, **opt_kwargs)
-np.testing.assert_almost_equal(rslt.f, 276593.1438469899)
+np.testing.assert_almost_equal(rslt.f, 210180.78434517948)
