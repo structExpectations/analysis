@@ -8,7 +8,7 @@ EDUC:
     educ_years: [0, 0, 0]
 SIMULATION:
     seed_sim: 102
-    num_agents_sim: 20000
+    num_agents_sim: 50000
 SOLUTION:
     seed_emax: 635
     num_draws_emax: 500
