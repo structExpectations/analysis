@@ -129,9 +129,9 @@ class SimulationBasedEstimationCls:
             + ".info"
         )
 
-        if self.num_evals == 1 and os.path.exists(fname):
+        if self.num_evals == 0 and os.path.exists(fname):
             os.unlink(fname)
-        if self.num_evals == 1 and os.path.exists(fname2):
+        if self.num_evals == 0 and os.path.exists(fname2):
             os.unlink(fname2)
 
         with open(fname, "a+") as outfile:
