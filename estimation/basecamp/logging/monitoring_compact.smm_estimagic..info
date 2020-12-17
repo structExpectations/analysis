@@ -1,0 +1,310 @@
+
+
+EVALUATION              1
+
+
+
+    fval   365843.03385
+
+const_wage_eq      gamma_0s1        2.26616
+
+const_wage_eq      gamma_0s2         2.0829
+
+const_wage_eq      gamma_0s3        2.34803
+
+exp_returns      gamma_1s1         0.1929
+
+exp_returns      gamma_1s2         0.2513
+
+exp_returns      gamma_1s3         0.2519
+
+exp_accm           g_s1            0.2
+
+exp_accm           g_s2            0.2
+
+exp_accm           g_s3            0.2
+
+exp_deprec       delta_s1           0.02
+
+exp_deprec       delta_s2           0.02
+
+exp_deprec       delta_s3           0.02
+
+hetrg_unobs       theta_p1            0.0
+
+hetrg_unobs       theta_f1            0.0
+
+  shares        share_1            0.0
+
+sd_wage_shock        sigma_1        0.46764
+
+sd_wage_shock        sigma_2        0.43983
+
+disutil_work      no_kids_f        0.00132
+
+disutil_work      no_kids_p        -0.1817
+
+disutil_work     yes_kids_f        0.45996
+
+disutil_work     yes_kids_p       -0.36517
+
+disutil_work     child_02_f        0.13304
+
+disutil_work     child_02_p       -0.00178
+
+disutil_work     child_35_f        0.00223
+
+disutil_work     child_35_p          -0.02
+
+disutil_work    child_610_f          0.001
+
+disutil_work    child_610_p          -0.09
+
+
+
+EVALUATION              2
+
+
+
+    fval  1192926.12054
+
+const_wage_eq      gamma_0s1        2.81384
+
+const_wage_eq      gamma_0s2         2.0829
+
+const_wage_eq      gamma_0s3        2.34803
+
+exp_returns      gamma_1s1         0.1929
+
+exp_returns      gamma_1s2         0.2513
+
+exp_returns      gamma_1s3         0.2519
+
+exp_accm           g_s1            0.2
+
+exp_accm           g_s2            0.2
+
+exp_accm           g_s3            0.2
+
+exp_deprec       delta_s1           0.02
+
+exp_deprec       delta_s2           0.02
+
+exp_deprec       delta_s3           0.02
+
+hetrg_unobs       theta_p1            0.0
+
+hetrg_unobs       theta_f1            0.0
+
+  shares        share_1            0.0
+
+sd_wage_shock        sigma_1        0.46764
+
+sd_wage_shock        sigma_2        0.43983
+
+disutil_work      no_kids_f        0.00132
+
+disutil_work      no_kids_p        -0.1817
+
+disutil_work     yes_kids_f        0.45996
+
+disutil_work     yes_kids_p       -0.36517
+
+disutil_work     child_02_f        0.13304
+
+disutil_work     child_02_p       -0.00178
+
+disutil_work     child_35_f        0.00223
+
+disutil_work     child_35_p          -0.02
+
+disutil_work    child_610_f          0.001
+
+disutil_work    child_610_p          -0.09
+
+
+
+EVALUATION              3
+
+
+
+    fval   261546.78791
+
+const_wage_eq      gamma_0s1        1.92768
+
+const_wage_eq      gamma_0s2         2.0829
+
+const_wage_eq      gamma_0s3        2.34803
+
+exp_returns      gamma_1s1         0.1929
+
+exp_returns      gamma_1s2         0.2513
+
+exp_returns      gamma_1s3         0.2519
+
+exp_accm           g_s1            0.2
+
+exp_accm           g_s2            0.2
+
+exp_accm           g_s3            0.2
+
+exp_deprec       delta_s1           0.02
+
+exp_deprec       delta_s2           0.02
+
+exp_deprec       delta_s3           0.02
+
+hetrg_unobs       theta_p1            0.0
+
+hetrg_unobs       theta_f1            0.0
+
+  shares        share_1            0.0
+
+sd_wage_shock        sigma_1        0.46764
+
+sd_wage_shock        sigma_2        0.43983
+
+disutil_work      no_kids_f        0.00132
+
+disutil_work      no_kids_p        -0.1817
+
+disutil_work     yes_kids_f        0.45996
+
+disutil_work     yes_kids_p       -0.36517
+
+disutil_work     child_02_f        0.13304
+
+disutil_work     child_02_p       -0.00178
+
+disutil_work     child_35_f        0.00223
+
+disutil_work     child_35_p          -0.02
+
+disutil_work    child_610_f          0.001
+
+disutil_work    child_610_p          -0.09
+
+
+
+EVALUATION              4
+
+
+
+    fval   267058.75957
+
+const_wage_eq      gamma_0s1        1.98334
+
+const_wage_eq      gamma_0s2         2.0829
+
+const_wage_eq      gamma_0s3        2.34803
+
+exp_returns      gamma_1s1         0.1929
+
+exp_returns      gamma_1s2         0.2513
+
+exp_returns      gamma_1s3         0.2519
+
+exp_accm           g_s1            0.2
+
+exp_accm           g_s2            0.2
+
+exp_accm           g_s3            0.2
+
+exp_deprec       delta_s1           0.02
+
+exp_deprec       delta_s2           0.02
+
+exp_deprec       delta_s3           0.02
+
+hetrg_unobs       theta_p1            0.0
+
+hetrg_unobs       theta_f1            0.0
+
+  shares        share_1            0.0
+
+sd_wage_shock        sigma_1        0.46764
+
+sd_wage_shock        sigma_2        0.43983
+
+disutil_work      no_kids_f        0.00132
+
+disutil_work      no_kids_p        -0.1817
+
+disutil_work     yes_kids_f        0.45996
+
+disutil_work     yes_kids_p       -0.36517
+
+disutil_work     child_02_f        0.13304
+
+disutil_work     child_02_p       -0.00178
+
+disutil_work     child_35_f        0.00223
+
+disutil_work     child_35_p          -0.02
+
+disutil_work    child_610_f          0.001
+
+disutil_work    child_610_p          -0.09
+
+
+
+EVALUATION              5
+
+
+
+    fval   260617.80571
+
+const_wage_eq      gamma_0s1        1.88854
+
+const_wage_eq      gamma_0s2         2.0829
+
+const_wage_eq      gamma_0s3        2.34803
+
+exp_returns      gamma_1s1         0.1929
+
+exp_returns      gamma_1s2         0.2513
+
+exp_returns      gamma_1s3         0.2519
+
+exp_accm           g_s1            0.2
+
+exp_accm           g_s2            0.2
+
+exp_accm           g_s3            0.2
+
+exp_deprec       delta_s1           0.02
+
+exp_deprec       delta_s2           0.02
+
+exp_deprec       delta_s3           0.02
+
+hetrg_unobs       theta_p1            0.0
+
+hetrg_unobs       theta_f1            0.0
+
+  shares        share_1            0.0
+
+sd_wage_shock        sigma_1        0.46764
+
+sd_wage_shock        sigma_2        0.43983
+
+disutil_work      no_kids_f        0.00132
+
+disutil_work      no_kids_p        -0.1817
+
+disutil_work     yes_kids_f        0.45996
+
+disutil_work     yes_kids_p       -0.36517
+
+disutil_work     child_02_f        0.13304
+
+disutil_work     child_02_p       -0.00178
+
+disutil_work     child_35_f        0.00223
+
+disutil_work     child_35_p          -0.02
+
+disutil_work    child_610_f          0.001
+
+disutil_work    child_610_p          -0.09
+

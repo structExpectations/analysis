@@ -133,29 +133,115 @@ def get_moments(data):
 
     # Store moments in groups as nested dictionary
     for group in [
+        "Wage_Distribution_Educ_Low",
+        "Wage_Distribution_Educ_Middle",
+        "Wage_Distribution_Educ_High",
         "Wage_Distribution",
+        "Wage_By_Full_Time_Experience_Educ_Low",
+        "Wage_By_Full_Time_Experience_Educ_Middle",
+        "Wage_By_Full_Time_Experience_Educ_High",
         "Choice_Probability",
         "Employment_Shares",
         "Transitions",
     ]:
         moments[group] = dict()
 
-    # Unconditional moments of the wage distribution
-    info = (
-        data[data["Choice"] != 0]
-        .groupby(["Period"])["Wage_Observed"]
-        .describe()
-        .to_dict()
+    # Wage distribution by education
+    names = [
+        "Wage_Distribution_Educ_Low",
+        "Wage_Distribution_Educ_Middle",
+        "Wage_Distribution_Educ_High",
+    ]
+    for educ_level in range(3):
+        data_subset = data[data["Education_Level"] == educ_level]
+
+        info = (
+            data_subset[data_subset["Choice"] != 0]
+            .groupby(["Period"])["Wage_Observed"]
+            .describe()
+            .to_dict()
+        )
+
+        for period in range(educ_level, 39):
+            moments[names[educ_level]][period] = []
+            try:
+                for label in ["mean", "std"]:
+                    moments[names[educ_level]][period].append(info[label][period])
+            except KeyError:
+                for i in range(2):
+                    moments[names[educ_level]][period].append(np.nan)
+
+    # Wages at entrace of working life
+    moments["Wage_Distribution"]["First_Wage"] = []
+    moments["Wage_Distribution"]["First_Wage"].extend(
+        data[(data["Period"].isin(range(4))) & (data["Choice"] != 0)]
+        .groupby(["Education_Level"])["Wage_Observed"]
+        .mean()
+    )
+    moments["Wage_Distribution"]["First_Wage"].extend(
+        data[(data["Period"].isin(range(4))) & (data["Choice"] != 0)]
+        .groupby(["Education_Level"])["Wage_Observed"]
+        .std()
+    )
+    moments["Wage_Distribution"]["First_Wage"].extend(
+        data[(data["Period"].isin(range(4))) & (data["Choice"] != 0)]
+        .groupby(["Education_Level"])["Wage_Observed"]
+        .quantile(0.25)
+    )
+    moments["Wage_Distribution"]["First_Wage"].extend(
+        data[(data["Period"].isin(range(4))) & (data["Choice"] != 0)]
+        .groupby(["Education_Level"])["Wage_Observed"]
+        .quantile(0.5)
+    )
+    moments["Wage_Distribution"]["First_Wage"].extend(
+        data[(data["Period"].isin(range(4))) & (data["Choice"] != 0)]
+        .groupby(["Education_Level"])["Wage_Observed"]
+        .quantile(0.75)
     )
 
-    for period in range(39):
-        moments["Wage_Distribution"][period] = []
-        try:
-            for label in ["mean", "std"]:
-                moments["Wage_Distribution"][period].append(info[label][period])
-        except KeyError:
-            for i in range(2):
-                moments["Wage_Distribution"][period].append(np.nan)
+    # Wages by full time experience
+    names = [
+        "Wage_By_Full_Time_Experience_Educ_Low",
+        "Wage_By_Full_Time_Experience_Educ_Middle",
+        "Wage_By_Full_Time_Experience_Educ_High",
+    ]
+
+    for educ_level in range(3):
+        data_subset = data[data["Education_Level"] == educ_level]
+        info = (
+            data_subset[data_subset["Choice"] != 0]
+            .groupby(["Experience_Full_Time"])["Wage_Observed"]
+            .describe()
+            .to_dict()
+        )
+        for exp in range(20):
+            moments[names[educ_level]][exp] = []
+            try:
+                moments[names[educ_level]][exp].append(info["mean"][exp])
+            except KeyError:
+                moments[names[educ_level]][exp].append(np.nan)
+
+    # Wage distribution during working life
+    data_subset = data[data["Choice"] == 2]
+    moments["Wage_Distribution"]["Full_Time"] = []
+    moments["Wage_Distribution"]["Full_Time"].extend(
+        data_subset.groupby(["Education_Level"])["Wage_Observed"].mean()
+    )
+    moments["Wage_Distribution"]["Full_Time"].extend(
+        data_subset.groupby(["Education_Level"])["Wage_Observed"].quantile(0.1)
+    )
+    moments["Wage_Distribution"]["Full_Time"].extend(
+        data_subset.groupby(["Education_Level"])["Wage_Observed"].quantile(0.25)
+    )
+    moments["Wage_Distribution"]["Full_Time"].extend(
+        data_subset.groupby(["Education_Level"])["Wage_Observed"].quantile(0.5)
+    )
+    moments["Wage_Distribution"]["Full_Time"].extend(
+        data_subset.groupby(["Education_Level"])["Wage_Observed"].quantile(0.75)
+    )
+    moments["Wage_Distribution"]["Full_Time"].extend(
+        data_subset.groupby(["Education_Level"])["Wage_Observed"].quantile(0.9)
+    )
 
     # Unconditional moments of the choice probabilities
     info = data.groupby(["Period"])["Choice"].value_counts(normalize=True).to_dict()
