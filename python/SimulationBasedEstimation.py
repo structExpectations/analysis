@@ -1,3 +1,4 @@
+import yaml
 import os
 
 import pandas as pd
@@ -85,8 +86,15 @@ class SimulationBasedEstimationCls:
 
         self.params = params_cand
 
+        # Extract replacement rate
+        benefits_base = float(params_cand.loc["benefits_base", "value"].values[0])
+        model_spec_init_dict = yaml.load(open(self.model_spec_init_file_name), Loader=yaml.Loader)
+        model_spec_init_dict["TAXES_TRANSFERS"]["benefits_base"] = benefits_base
+        fname_modified = "resources/model_spec_init.modified.yml"
+        yaml.dump(model_spec_init_dict, open(fname_modified, "w"))
+
         # Generate simulated data set
-        data_frame_sim = soepy.simulate(self.params, self.model_spec_init_file_name)
+        data_frame_sim = soepy.simulate(self.params, fname_modified)
 
         # Calculate simulated moments
         moments_sim = self.get_moments(data_frame_sim)

@@ -19,13 +19,13 @@ weighting_matrix = pickle.load(open("resources/weighting_matrix.pkl", "rb"))
 moments_obs = pickle.load(open("resources/moments_obs.pkl", "rb"))
 model_params = pd.read_pickle(model_para_fname)
 
+# We extend the model parameters to also include the replacement rate as the last element.
+model_params.loc["benefits_base", :] = [200, 300, 100, True]
+
 # We need to add the information which parameters are fixed, which are free. We fix all
 # parameters as the default and then free the relevant set.
-model_params["fixed"] = False
-model_params.loc[("exp_accm"), "fixed"] = True
-model_params.loc[("exp_deprec"), "fixed"] = True
-model_params.loc[("hetrg_unobs"), "fixed"] = True
-model_params.loc[("shares"), "fixed"] = True
+model_params["fixed"] = True
+model_params.loc[("benefits_base"), "fixed"] = False
 
 # We set the tuning parameters of the optimizer so that it runs forever.
 opt_kwargs = dict()
