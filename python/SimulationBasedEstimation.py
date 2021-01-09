@@ -86,10 +86,16 @@ class SimulationBasedEstimationCls:
 
         self.params = params_cand
 
-        # Extract replacement rate
+        # Extract elements from configuration file.
         benefits_base = float(params_cand.loc["benefits_base", "value"].values[0])
+        delta = float(params_cand.loc["delta", "value"].values[0])
+        mu = float(params_cand.loc["mu", "value"].values[0])
+
         model_spec_init_dict = yaml.load(open(self.model_spec_init_file_name), Loader=yaml.Loader)
         model_spec_init_dict["TAXES_TRANSFERS"]["benefits_base"] = benefits_base
+        model_spec_init_dict["CONSTANTS"]["delta"] = delta
+        model_spec_init_dict["CONSTANTS"]["mu"] = mu
+
         fname_modified = "resources/model_spec_init.modified.yml"
         yaml.dump(model_spec_init_dict, open(fname_modified, "w"))
 
