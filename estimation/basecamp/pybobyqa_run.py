@@ -30,14 +30,16 @@ model_params["fixed"] = True
 model_params.loc[("benefits_base"), "fixed"] = True
 model_params.loc[("delta"), "fixed"] = True
 model_params.loc[("mu"), "fixed"] = True
-model_params.loc[("exp_deprec"), "fixed"] = False
+model_params.loc[("exp_deprec"), "fixed"] = True
+model_params.loc[("disutil_work", "no_kids_f"), "fixed"] = False
+model_params.loc[("disutil_work", "no_kids_p"), "fixed"] = False
 
 # We set the tuning parameters of the optimizer so that it runs forever.
 opt_kwargs = dict()
 opt_kwargs["scaling_within_bounds"] = True
 opt_kwargs["seek_global_minimum"] = True
 opt_kwargs["objfun_has_noise"] = True
-opt_kwargs["maxfun"] = 10
+opt_kwargs["maxfun"] = 1
 
 # We need to set up our criterion function.
 adapter_kwargs = dict()
