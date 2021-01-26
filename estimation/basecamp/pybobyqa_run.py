@@ -39,7 +39,7 @@ opt_kwargs = dict()
 opt_kwargs["scaling_within_bounds"] = True
 opt_kwargs["seek_global_minimum"] = True
 opt_kwargs["objfun_has_noise"] = True
-opt_kwargs["maxfun"] = 1
+opt_kwargs["maxfun"] = 100
 
 # We need to set up our criterion function.
 adapter_kwargs = dict()
