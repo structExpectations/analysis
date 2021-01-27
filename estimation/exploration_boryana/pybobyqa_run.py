@@ -18,7 +18,7 @@ model_para_fname = "resources/model_params.pkl"
 weighting_matrix = pickle.load(open("resources/weighting_matrix.pkl", "rb"))
 moments_obs = pickle.load(open("resources/moments_obs.pkl", "rb"))
 model_params = pd.read_pickle(model_para_fname)
-
+    
 # We extend the model parameters to also include the replacement rate as the last element.
 model_params.loc["benefits_base", :] = [200, 1000, 100, True]
 model_params.loc["delta", :] = [0.98, 0.99, 0.90, True]
@@ -30,7 +30,7 @@ opt_kwargs = dict()
 opt_kwargs["scaling_within_bounds"] = True
 opt_kwargs["seek_global_minimum"] = True
 opt_kwargs["objfun_has_noise"] = True
-opt_kwargs["maxfun"] = 10
+opt_kwargs["maxfun"] = 1
 
 # We need to set up our criterion function.
 adapter_kwargs = dict()

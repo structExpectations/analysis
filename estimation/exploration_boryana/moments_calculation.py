@@ -173,31 +173,66 @@ def get_moments(data):
 
     # Wages at entrace of working life
     moments["Wage_Distribution"]["First_Wage"] = []
-    moments["Wage_Distribution"]["First_Wage"].extend(
+
+    info = (
         data[(data["Period"].isin(range(4))) & (data["Choice"] != 0)]
         .groupby(["Education_Level"])["Wage_Observed"]
         .mean()
+        .to_dict()
     )
-    moments["Wage_Distribution"]["First_Wage"].extend(
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Wage_Distribution"]["First_Wage"].append(info[educ_level])
+        except KeyError:
+            moments["Wage_Distribution"]["First_Wage"].append(np.nan)
+
+    info = (
         data[(data["Period"].isin(range(4))) & (data["Choice"] != 0)]
         .groupby(["Education_Level"])["Wage_Observed"]
         .std()
+        .to_dict()
     )
-    moments["Wage_Distribution"]["First_Wage"].extend(
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Wage_Distribution"]["First_Wage"].append(info[educ_level])
+        except KeyError:
+            moments["Wage_Distribution"]["First_Wage"].append(np.nan)
+
+    info = (
         data[(data["Period"].isin(range(4))) & (data["Choice"] != 0)]
         .groupby(["Education_Level"])["Wage_Observed"]
         .quantile(0.25)
+        .to_dict()
     )
-    moments["Wage_Distribution"]["First_Wage"].extend(
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Wage_Distribution"]["First_Wage"].append(info[educ_level])
+        except KeyError:
+            moments["Wage_Distribution"]["First_Wage"].append(np.nan)
+
+    info = (
         data[(data["Period"].isin(range(4))) & (data["Choice"] != 0)]
         .groupby(["Education_Level"])["Wage_Observed"]
         .quantile(0.5)
+        .to_dict()
     )
-    moments["Wage_Distribution"]["First_Wage"].extend(
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Wage_Distribution"]["First_Wage"].append(info[educ_level])
+        except KeyError:
+            moments["Wage_Distribution"]["First_Wage"].append(np.nan)
+
+    info = (
         data[(data["Period"].isin(range(4))) & (data["Choice"] != 0)]
         .groupby(["Education_Level"])["Wage_Observed"]
         .quantile(0.75)
+        .to_dict()
     )
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Wage_Distribution"]["First_Wage"].append(info[educ_level])
+        except KeyError:
+            moments["Wage_Distribution"]["First_Wage"].append(np.nan)
 
     # Wages by full time experience
     names = [
@@ -224,24 +259,68 @@ def get_moments(data):
     # Wage distribution during working life
     data_subset = data[data["Choice"] == 2]
     moments["Wage_Distribution"]["Full_Time"] = []
-    moments["Wage_Distribution"]["Full_Time"].extend(
-        data_subset.groupby(["Education_Level"])["Wage_Observed"].mean()
+
+    info = data_subset.groupby(["Education_Level"])["Wage_Observed"].mean().to_dict()
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Wage_Distribution"]["Full_Time"].append(info[educ_level])
+        except KeyError:
+            moments["Wage_Distribution"]["Full_Time"].append(np.nan)
+
+    info = (
+        data_subset.groupby(["Education_Level"])["Wage_Observed"]
+        .quantile(0.1)
+        .to_dict()
     )
-    moments["Wage_Distribution"]["Full_Time"].extend(
-        data_subset.groupby(["Education_Level"])["Wage_Observed"].quantile(0.1)
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Wage_Distribution"]["Full_Time"].append(info[educ_level])
+        except KeyError:
+            moments["Wage_Distribution"]["Full_Time"].append(np.nan)
+
+    info = (
+        data_subset.groupby(["Education_Level"])["Wage_Observed"]
+        .quantile(0.25)
+        .to_dict()
     )
-    moments["Wage_Distribution"]["Full_Time"].extend(
-        data_subset.groupby(["Education_Level"])["Wage_Observed"].quantile(0.25)
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Wage_Distribution"]["Full_Time"].append(info[educ_level])
+        except KeyError:
+            moments["Wage_Distribution"]["Full_Time"].append(np.nan)
+
+    info = (
+        data_subset.groupby(["Education_Level"])["Wage_Observed"]
+        .quantile(0.5)
+        .to_dict()
     )
-    moments["Wage_Distribution"]["Full_Time"].extend(
-        data_subset.groupby(["Education_Level"])["Wage_Observed"].quantile(0.5)
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Wage_Distribution"]["Full_Time"].append(info[educ_level])
+        except KeyError:
+            moments["Wage_Distribution"]["Full_Time"].append(np.nan)
+
+    info = (
+        data_subset.groupby(["Education_Level"])["Wage_Observed"]
+        .quantile(0.75)
+        .to_dict()
     )
-    moments["Wage_Distribution"]["Full_Time"].extend(
-        data_subset.groupby(["Education_Level"])["Wage_Observed"].quantile(0.75)
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Wage_Distribution"]["Full_Time"].append(info[educ_level])
+        except KeyError:
+            moments["Wage_Distribution"]["Full_Time"].append(np.nan)
+
+    info = (
+        data_subset.groupby(["Education_Level"])["Wage_Observed"]
+        .quantile(0.9)
+        .to_dict()
     )
-    moments["Wage_Distribution"]["Full_Time"].extend(
-        data_subset.groupby(["Education_Level"])["Wage_Observed"].quantile(0.9)
-    )
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Wage_Distribution"]["Full_Time"].append(info[educ_level])
+        except KeyError:
+            moments["Wage_Distribution"]["Full_Time"].append(np.nan)
 
     # Unconditional moments of the choice probabilities
     info = data.groupby(["Period"])["Choice"].value_counts(normalize=True).to_dict()
@@ -259,217 +338,278 @@ def get_moments(data):
     # All employment
     moments["Employment_Shares"]["All_Employment"] = []
     # Single no child
-    moments["Employment_Shares"]["All_Employment"].extend(
-        (
-            data[
-                (data["Partner_Indicator"] == 0)
-                & (data["Age_Youngest_Child"] == -1)
-                & (data["Choice"] != 0)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[
-                (data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] == -1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[
+            (data["Partner_Indicator"] == 0)
+            & (data["Age_Youngest_Child"] == -1)
+            & (data["Choice"] != 0)
+        ]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] == -1)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["All_Employment"].append(info[educ_level])
+        except KeyError:
+            moments["Employment_Shares"]["All_Employment"].append(np.nan)
 
     # Married no child
-    moments["Employment_Shares"]["All_Employment"].extend(
-        (
-            data[
-                (data["Partner_Indicator"] == 1)
-                & (data["Age_Youngest_Child"] == -1)
-                & (data["Choice"] != 0)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[
-                (data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] == -1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[
+            (data["Partner_Indicator"] == 1)
+            & (data["Age_Youngest_Child"] == -1)
+            & (data["Choice"] != 0)
+        ]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] == -1)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["All_Employment"].append(info[educ_level])
+        except KeyError:
+            moments["Employment_Shares"]["All_Employment"].append(np.nan)
+
     # Lone mothers
-    moments["Employment_Shares"]["All_Employment"].extend(
-        (
-            data[
-                (data["Partner_Indicator"] == 0)
-                & (data["Age_Youngest_Child"] != -1)
-                & (data["Choice"] != 0)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[
-                (data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] != -1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[
+            (data["Partner_Indicator"] == 0)
+            & (data["Age_Youngest_Child"] != -1)
+            & (data["Choice"] != 0)
+        ]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] != -1)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["All_Employment"].append(info[educ_level])
+        except KeyError:
+            moments["Employment_Shares"]["All_Employment"].append(np.nan)
+
     # Married mothers
-    moments["Employment_Shares"]["All_Employment"].extend(
-        (
-            data[
-                (data["Partner_Indicator"] == 1)
-                & (data["Age_Youngest_Child"] != -1)
-                & (data["Choice"] != 0)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[
-                (data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] != -1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[
+            (data["Partner_Indicator"] == 1)
+            & (data["Age_Youngest_Child"] != -1)
+            & (data["Choice"] != 0)
+        ]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] != -1)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["All_Employment"].append(info[educ_level])
+        except KeyError:
+            moments["Employment_Shares"]["All_Employment"].append(np.nan)
+
     # Child 0-2
-    moments["Employment_Shares"]["All_Employment"].extend(
-        (
-            data[(data["Age_Youngest_Child"].isin([0, 1, 2])) & (data["Choice"] != 0)]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[(data["Age_Youngest_Child"].isin([0, 1, 2]))]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[(data["Age_Youngest_Child"].isin([0, 1, 2])) & (data["Choice"] != 0)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Age_Youngest_Child"].isin([0, 1, 2]))]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["All_Employment"].append(info[educ_level])
+        except KeyError:
+            moments["Employment_Shares"]["All_Employment"].append(np.nan)
+
     # Child 3-5
-    moments["Employment_Shares"]["All_Employment"].extend(
-        (
-            data[(data["Age_Youngest_Child"].isin([3, 4, 5])) & (data["Choice"] != 0)]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[(data["Age_Youngest_Child"].isin([3, 4, 5]))]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[(data["Age_Youngest_Child"].isin([3, 4, 5])) & (data["Choice"] != 0)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Age_Youngest_Child"].isin([3, 4, 5]))]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["All_Employment"].append(info[educ_level])
+        except KeyError:
+            moments["Employment_Shares"]["All_Employment"].append(np.nan)
+
     # Child 6-10
-    moments["Employment_Shares"]["All_Employment"].extend(
-        (
-            data[
-                (data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10]))
-                & (data["Choice"] != 0)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[(data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10]))]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[
+            (data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10])) & (data["Choice"] != 0)
+        ]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10]))]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_list()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["All_Employment"].append(info[educ_level])
+        except KeyError:
+            moments["Employment_Shares"]["All_Employment"].append(np.nan)
 
     # Part-time employment
     moments["Employment_Shares"]["Part_Time_Employment"] = []
     # Single no child
-    moments["Employment_Shares"]["Part_Time_Employment"].extend(
-        (
-            data[
-                (data["Partner_Indicator"] == 0)
-                & (data["Age_Youngest_Child"] == -1)
-                & (data["Choice"] == 1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[
-                (data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] == -1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[
+            (data["Partner_Indicator"] == 0)
+            & (data["Age_Youngest_Child"] == -1)
+            & (data["Choice"] == 1)
+        ]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] == -1)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(
+                info[educ_level]
+            )
+        except KeyError:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(np.nan)
+
     # Married no child
-    moments["Employment_Shares"]["Part_Time_Employment"].extend(
-        (
-            data[
-                (data["Partner_Indicator"] == 1)
-                & (data["Age_Youngest_Child"] == -1)
-                & (data["Choice"] == 1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[
-                (data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] == -1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[
+            (data["Partner_Indicator"] == 1)
+            & (data["Age_Youngest_Child"] == -1)
+            & (data["Choice"] == 1)
+        ]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] == -1)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(
+                info[educ_level]
+            )
+        except KeyError:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(np.nan)
+
     # Lone mothers
-    moments["Employment_Shares"]["Part_Time_Employment"].extend(
-        (
-            data[
-                (data["Partner_Indicator"] == 0)
-                & (data["Age_Youngest_Child"] != -1)
-                & (data["Choice"] == 1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[
-                (data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] != -1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[
+            (data["Partner_Indicator"] == 0)
+            & (data["Age_Youngest_Child"] != -1)
+            & (data["Choice"] == 1)
+        ]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Partner_Indicator"] == 0) & (data["Age_Youngest_Child"] != -1)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(
+                info[educ_level]
+            )
+        except KeyError:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(np.nan)
+
     # Married mothers
-    moments["Employment_Shares"]["Part_Time_Employment"].extend(
-        (
-            data[
-                (data["Partner_Indicator"] == 1)
-                & (data["Age_Youngest_Child"] != -1)
-                & (data["Choice"] == 1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[
-                (data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] != -1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[
+            (data["Partner_Indicator"] == 1)
+            & (data["Age_Youngest_Child"] != -1)
+            & (data["Choice"] == 1)
+        ]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Partner_Indicator"] == 1) & (data["Age_Youngest_Child"] != -1)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(
+                info[educ_level]
+            )
+        except KeyError:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(np.nan)
+
     # Child 0-2
-    moments["Employment_Shares"]["Part_Time_Employment"].extend(
-        (
-            data[(data["Age_Youngest_Child"].isin([0, 1, 2])) & (data["Choice"] == 1)]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[(data["Age_Youngest_Child"].isin([0, 1, 2]))]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[(data["Age_Youngest_Child"].isin([0, 1, 2])) & (data["Choice"] == 1)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Age_Youngest_Child"].isin([0, 1, 2]))]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(
+                info[educ_level]
+            )
+        except KeyError:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(np.nan)
+
     # Child 3-5
-    moments["Employment_Shares"]["Part_Time_Employment"].extend(
-        (
-            data[(data["Age_Youngest_Child"].isin([3, 4, 5])) & (data["Choice"] == 1)]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[(data["Age_Youngest_Child"].isin([3, 4, 5]))]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[(data["Age_Youngest_Child"].isin([3, 4, 5])) & (data["Choice"] == 1)]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Age_Youngest_Child"].isin([3, 4, 5]))]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(
+                info[educ_level]
+            )
+        except KeyError:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(np.nan)
+
     # Child 6-10
-    moments["Employment_Shares"]["Part_Time_Employment"].extend(
-        (
-            data[
-                (data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10]))
-                & (data["Choice"] == 1)
-            ]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-            / data[(data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10]))]
-            .groupby(["Education_Level"])["Identifier"]
-            .count()
-        ).to_list()
-    )
+    info = (
+        data[
+            (data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10])) & (data["Choice"] == 1)
+        ]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+        / data[(data["Age_Youngest_Child"].isin([6, 7, 8, 9, 10]))]
+        .groupby(["Education_Level"])["Identifier"]
+        .count()
+    ).to_dict()
+
+    for educ_level in [0, 1, 2]:
+        try:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(
+                info[educ_level]
+            )
+        except KeyError:
+            moments["Employment_Shares"]["Part_Time_Employment"].append(np.nan)
 
     # Transitions
     # Transition rates from out of work into work by education
@@ -537,3 +677,4 @@ def get_moments(data):
     moments["Transitions"]["In_To_Out"].extend([avg])
 
     return moments
+
