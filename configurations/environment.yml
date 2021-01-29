@@ -6,8 +6,8 @@ channels:
   - OpenSourceEconomics
 
 dependencies:
-  - python=3.7.3
-  - pip=19.0.3
+  - python=3.7.9
+  - pip=20.3.3
   - codecov
   - estimagic
   - matplotlib
@@ -16,7 +16,7 @@ dependencies:
   - pyaml
   - numpy=1.19.5
   - nlopt
-  - pytest
+  - pytest=6.2.1
   - pytest-cov
   - Sphinx
   - flake8
