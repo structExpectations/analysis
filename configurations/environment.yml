@@ -10,15 +10,15 @@ dependencies:
   - pip=19.0.3
   - codecov
   - estimagic
-  - matplotlib>=3.0.0
-  - numba>=0.43.1
-  - pandas>=0.24
+  - matplotlib
+  - numba=0.52.0
+  - pandas=1.2.0
   - pyaml
-  - numpy
+  - numpy=1.19.5
   - nlopt
   - pytest
   - pytest-cov
-  - Sphinx>=2.0.0
+  - Sphinx
   - flake8
   - sphinx-autobuild
   - pip:
