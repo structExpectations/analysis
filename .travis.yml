@@ -29,3 +29,4 @@ script:
 
     # Test estimation run and report
     - cd estimation/basecamp; python pybobyqa_run.py; python create_report.py --all
+      
