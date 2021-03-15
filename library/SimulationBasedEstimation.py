@@ -59,7 +59,9 @@ class SimulationBasedEstimationCls:
         delta = float(params_cand.loc["delta", "value"].values[0])
         mu = float(params_cand.loc["mu", "value"].values[0])
 
-        model_spec_init_dict = yaml.load(open(self.model_spec_init_file_name), Loader=yaml.Loader)
+        model_spec_init_dict = yaml.load(
+            open(self.model_spec_init_file_name), Loader=yaml.Loader
+        )
         model_spec_init_dict["TAXES_TRANSFERS"]["benefits_base"] = benefits_base
         model_spec_init_dict["CONSTANTS"]["delta"] = delta
         model_spec_init_dict["CONSTANTS"]["mu"] = mu

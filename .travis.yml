@@ -28,4 +28,4 @@ script:
     - py.test
 
     # Test estimation run and report
-    - cd estimation/exploration_peisenha; python pybobyqa_run.py
+    - cd estimation/basecamp_revision; python run.py
