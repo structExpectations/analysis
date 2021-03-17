@@ -26,6 +26,3 @@ script:
 
     # pytest submodules
     - py.test
-
-    # Test estimation run and report
-    - cd estimation/basecamp_revision; python run.py
